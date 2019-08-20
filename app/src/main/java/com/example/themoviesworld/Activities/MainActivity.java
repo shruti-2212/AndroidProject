@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(this, LayoutActivity.class);
                 i.putExtra("User Name", userDao.getUser(id).getFirst_name());
                 startActivity(i);
+                finish();
             }
         }
 
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             });
             button_login.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(MainActivity.this, ChangePasswordActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             });
         }

@@ -1,6 +1,5 @@
 package com.example.themoviesworld.Activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.themoviesworld.Api.Api;
@@ -64,6 +64,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
     TabItem topRatedMovies;
     PagerAdapter pagerAdapter;
     DrawerLayout drawer;
+    ProgressBar progressBar;
     String imageUrl = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/";
 
     TextView nav_heading;
@@ -229,6 +230,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         topRatedMovies = findViewById(R.id.top_rated_movies);
         latestMovies = findViewById(R.id.latest_movies);
         drawer = findViewById(R.id.drawer_layout);
+        progressBar = findViewById(R.id.progress_bar);
 
         dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -251,71 +253,88 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         drawer.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        Log.i("TAG", "Check Database Empty" + resultDao.getResult().size());
-        if (resultDao.getResult().size() == 0) {
+        List<Result> resultList = resultDao.getResult();
+        Log.i("TAG", "Check Database Empty" + resultList);
+
+        if (resultList == null || resultList.size() == 0) {
+            viewPager.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
 
             Log.i("TAG", "On Database Empty");
+
             callApiUpcoming(new BlockExecutor() {
                 @Override
                 public void executeThis() {
                     callApiTopRated(new BlockExecutor() {
                         @Override
                         public void executeThis() {
-                            callApiPopularMovies(null);
-
+                            callApiPopularMovies(new BlockExecutor() {
+                                @Override
+                                public void executeThis() {
+                                    updateUI();
+                                }
+                            });
                         }
                     });
                 }
             });
-        }
+        } else {
+            updateUI();
 
-        currentTime = new Date();
-        Log.i("TAG", "Calculating time" + currentTime);
-        try {
+            currentTime = new Date();
             Log.i("TAG", "Calculating time" + currentTime);
-            lastTimeTRM = dateFormat.parse(resultDao.getMaxTimeStamp(TYPE1));
-            lastTimePM = dateFormat.parse(resultDao.getMaxTimeStamp(TYPE2));
-            lastTimeUM = dateFormat.parse(resultDao.getMaxTimeStamp(TYPE3));
-            Log.i("TAG", "Time TRM : " + lastTimeTRM.getTime() + "-" + currentTime.getTime());
+            try {
+                Log.i("TAG", "Calculating time" + currentTime);
+                lastTimeTRM = dateFormat.parse(resultDao.getMaxTimeStamp(TYPE1));
+                lastTimePM = dateFormat.parse(resultDao.getMaxTimeStamp(TYPE2));
+                lastTimeUM = dateFormat.parse(resultDao.getMaxTimeStamp(TYPE3));
+                Log.i("TAG", "Time TRM : " + lastTimeTRM.getTime() + "-" + currentTime.getTime());
 
-            timeDiffrerenceTRM = abs(lastTimeTRM.getTime() - currentTime.getTime());
-            timeDiffrerencePM = abs(lastTimeTRM.getTime() - currentTime.getTime());
-            timeDiffrerenceUM = abs(lastTimeTRM.getTime() - currentTime.getTime());
-            Log.i("TAG", "Time TRM : " + timeDiffrerenceTRM);
+                timeDiffrerenceTRM = abs(lastTimeTRM.getTime() - currentTime.getTime());
+                timeDiffrerencePM = abs(lastTimeTRM.getTime() - currentTime.getTime());
+                timeDiffrerenceUM = abs(lastTimeTRM.getTime() - currentTime.getTime());
+                Log.i("TAG", "Time TRM : " + timeDiffrerenceTRM);
 
-            hrsTRM = (timeDiffrerenceTRM / TO_HRS);
-            hrsPM = (timeDiffrerencePM / TO_HRS);
-            hrsUM = (timeDiffrerenceUM / TO_HRS);
-            Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
-        } catch (Exception e) {
+                hrsTRM = (timeDiffrerenceTRM / TO_HRS);
+                hrsPM = (timeDiffrerencePM / TO_HRS);
+                hrsUM = (timeDiffrerenceUM / TO_HRS);
+                Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
+            } catch (Exception e) {
 
-            Log.i("TAG", "onCreate: Inside Catch Exception Occured");
-            e.printStackTrace();
-        }
+                Log.i("TAG", "onCreate: Inside Catch Exception Occured");
+                e.printStackTrace();
+            }
 
-        if (hrsTRM >= 4.0) {
-//                                        resultDao.deleteByType(TYPE1);
-            callApiTopRated(new BlockExecutor() {
-                @Override
-                public void executeThis() {
-                    if (hrsUM >= 4.0) {
-//                                        resultDao.deleteByType(TYPE3);
-                        callApiUpcoming(new BlockExecutor() {
-                            @Override
-                            public void executeThis() {
-                                if (hrsPM >= 4.0) {
-//                                        resultDao.deleteByType(TYPE2);
-                                    callApiPopularMovies(null);
+            if (hrsTRM >= 4.0) {
+                callApiTopRated(new BlockExecutor() {
+                    @Override
+                    public void executeThis() {
+
+                        if (hrsUM >= 4.0) {
+                            callApiUpcoming(new BlockExecutor() {
+                                @Override
+                                public void executeThis() {
+                                    if (hrsPM >= 4.0) {
+                                        callApiPopularMovies(new BlockExecutor() {
+                                            @Override
+                                            public void executeThis() {
+                                                // Update UI if required
+                                                updateUI();
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                        });
-                    }
+                            });
+                        }
 
-                }
-            });
+                    }
+                });
+            }
         }
 
+    }
 
+    private void updateUI() {
         Log.i("TAG", "onCreate:Layout Activity setting view pager ");
         pagerAdapter = new PageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setOffscreenPageLimit(1);
@@ -325,7 +344,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
 
-                viewPager.setCurrentItem(tab.getPosition(),false);
+                viewPager.setCurrentItem(tab.getPosition(), false);
                 Log.i("TAG", "" + tab.getPosition());
 
             }
@@ -343,6 +362,10 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
             }
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        // Update the visibility
+        viewPager.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -359,7 +382,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+    public boolean onNavigationItemSelected( MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_movies: {
                 startActivity(getIntent());
