@@ -45,9 +45,9 @@ import static com.example.themoviesworld.DBConstants.TYPE2;
 public class PopularMovies extends Fragment {
     private RecyclerView recyclerView;
 
-    private List<Result> results,mdata;
 
-//    private UserDatabase userDatabase;
+
+
     private ResultDao resultDao;
 
     private OnFragmentInteractionListener mListener;
@@ -59,7 +59,7 @@ public class PopularMovies extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //callApi();
+
     }
     // TODO: Rename and change types and number of parameters
     @Override
