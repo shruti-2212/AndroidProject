@@ -30,6 +30,7 @@ import com.example.themoviesworld.Adapters.PageAdapter;
 import com.example.themoviesworld.Models.Example;
 import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.MovieApp;
+import com.example.themoviesworld.PreferenceUtils;
 import com.example.themoviesworld.R;
 import com.example.themoviesworld.UserDatabase;
 import com.example.themoviesworld.dao.ResultDao;
@@ -391,15 +392,18 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
             }
             case R.id.Logout: {
 
-                SharedPreferences sharedPreferences = getSharedPreferences("Preferences", 0);
+                /*SharedPreferences sharedPreferences = getSharedPreferences("Preferences", 0);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 sharedPreferences.getString("login", null);
                 Log.i("Tag", "Logout" + sharedPreferences.getString("login", null));
                 editor.remove("login");
-                editor.commit();
+                editor.commit();*/
+
+                PreferenceUtils.saveId(0,this);
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("From logout",true);
                 startActivity(intent);
+                finish();
                 break;
             }
         }

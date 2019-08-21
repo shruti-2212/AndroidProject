@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.themoviesworld.MovieApp;
+import com.example.themoviesworld.PreferenceUtils;
 import com.example.themoviesworld.dao.UserDao;
 import com.example.themoviesworld.R;
 import com.example.themoviesworld.Models.User;
@@ -60,18 +61,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getSharedPreferences("Preferences", 0);
+        sharedPreferences = getApplicationContext().getSharedPreferences("Preferences", 0);
 
         userDao = MovieApp.getsUserDatabase().getUserDao();
-
+/*
         if(userDao.getUserCount()!=0&&sharedPreferences!=null
                 &&(getIntent().getBooleanExtra("From_Signup",false))==false
-                   &&(getIntent().getBooleanExtra("From logout",false))==false) {
+                   &&(getIntent().getBooleanExtra("From logout",false))==false) {*/
 
 
-            String Login = sharedPreferences.getString("login", null);
-            Log.i("TAG", "onCreate: shared preference" + Login);
-            int id = sharedPreferences.getInt("Id", 0);
+
+           /* String Login = sharedPreferences.getString("login", null);*/
+            //Log.i("TAG", "onCreate: shared preference" + id);
+        if(userDao.getUserCount()!=0&&PreferenceUtils.getId(getApplicationContext()) != 0) {
+            int id = PreferenceUtils.getId(getApplicationContext());
             Log.i("Tag", "USer Id is" + id);
             String lastLoginTime = userDao.getUser(id).getUserLoginTime();
             Date currentTime = new Date();
@@ -86,19 +89,22 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Tag", "Login time diff:" + loginTimeDiff);
             Log.i("Tag", "Login time diff in hrs:" + loginTimeDiffInHrs);
 
-            if (Login != null && loginTimeDiffInHrs < 24.0) {
+            if (  loginTimeDiffInHrs < 24.0) {
 
                 Intent i = new Intent(this, LayoutActivity.class);
                 i.putExtra("User Name", userDao.getUser(id).getFirst_name());
                 startActivity(i);
                 finish();
+            } else {
+
             }
         }
 
-        else if(userDao.getUserCount()==0||loginTimeDiffInHrs>=24.0
+
+        /*else if(userDao.getUserCount()==0||loginTimeDiffInHrs>=24.0
                 || sharedPreferences==null
                 || (getIntent().getBooleanExtra("From_Signup",false))==true
-                ||(getIntent().getBooleanExtra("From logout",false))==true) {
+                ||(getIntent().getBooleanExtra("From logout",false))==true) {}*/
             setContentView(R.layout.activity_main);
 
 
@@ -149,14 +155,14 @@ public class MainActivity extends AppCompatActivity {
                                    userDao.update(user);
                                     Log.i("Tag","Setting user login time"+user.getUserLoginTime());
 
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    /*SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString("login", user.getEmail());
                                     editor.putInt("Id",user.getId());
-                                    editor.commit();
-
-
+                                    editor.commit();*/
+                                    PreferenceUtils.saveId(user.getId(),getApplicationContext());
                                     Intent i = new Intent(MainActivity.this, LayoutActivity.class);
                                     i.putExtra("User Name", user.getFirst_name());
+                                    i.putExtra("ID",user.getId());
                                     startActivity(i);
                                     finish();
                                 } else {
@@ -181,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
             });
-        }
+
 
 
     }
