@@ -50,6 +50,7 @@ public class PopularMovies extends Fragment {
 //    private UserDatabase userDatabase;
     private ResultDao resultDao;
 
+
     private OnFragmentInteractionListener mListener;
 
     public PopularMovies() {
