@@ -79,13 +79,16 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
 
     Date lastTimeUM, lastTimePM, lastTimeTRM, currentTime;
 
+
     private void callApiTopRated(BlockExecutor iBlockExecutor) {
         Log.i("TAG", "Inside callAPITopRated");
 
         Api api = createApiRequest();
-
-        api.getTopRatedMovies().enqueue(new Callback<Example>() {
-            @Override
+        Call iCallback = api.getTopRatedMovies();
+        implementApiResponse(TYPE1, iCallback, iBlockExecutor);
+    }
+    /*.enqueue(new Callback<Example>() {*/
+           /* @Override
             public void onResponse(Call<Example> call, Response<Example> response) {
                 Example example = response.body();
 
@@ -108,16 +111,16 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
                 if (iBlockExecutor != null)
                     iBlockExecutor.executeThis();
             }
+*/
 
-
-            @Override
+           /* @Override
             public void onFailure(Call<Example> call, Throwable t) {
-                Log.i("TAG", "onFailure: " + t.getMessage());
+
 
             }
         });
+*/
 
-    }
 
     private void callApiPopularMovies(BlockExecutor iBlockExecutor) {
         Log.i("TAG", "Inside callAPIPopularMovies");
@@ -125,7 +128,8 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
 
         Api api = createApiRequest();
 
-        api.getPopularMovies().enqueue(new Callback<Example>() {
+        Call iCallback = api.getPopularMovies();
+        implementApiResponse(TYPE2, iCallback, iBlockExecutor);/*.enqueue(new Callback<Example>() {
             @Override
             public void onResponse(Call<Example> call, Response<Example> response) {
                 Example example = response.body();
@@ -154,7 +158,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
             public void onFailure(Call<Example> call, Throwable t) {
 
             }
-        });
+        });*/
     }
 
     public void callApiUpcoming(BlockExecutor iBlockExecutor) {
@@ -163,7 +167,9 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
 
         Api api = createApiRequest();
         Log.i("TAG", "In callApiUpcoming calling api");
-        api.getUpcomingMovies().enqueue(new Callback<Example>() {
+        Call iCallback = api.getUpcomingMovies();
+        implementApiResponse(TYPE3, iCallback, iBlockExecutor);
+    }/*.enqueue(new Callback<Example>() {
             @Override
             public void onResponse(Call<Example> call, Response<Example> response) {
                 Example example = response.body();
@@ -191,9 +197,9 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
             public void onFailure(Call<Example> call, Throwable t) {
                 Log.i("TAG", "onFailure: " + t.getMessage());
 
-            }
-        });
-    }
+            }*/
+    //  });
+
 
     public Api createApiRequest() {
         Log.i("TAG", "Inside create Api Request function");
@@ -209,6 +215,42 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
 
         Api api = retrofit.create(Api.class);
         return api;
+    }
+
+    private void implementApiResponse(String TYPE, Call iCallback, BlockExecutor iBlockExecutor) {
+
+        iCallback.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(Call<Example> call, Response<Example> response) {
+                Example example = response.body();
+                List<Result> results = example.getResults();
+                Log.i("TAG", "onResponse: " + example.getTotalResults() + example + " " + results.size());
+
+//
+                resultDao.deleteByType(TYPE);
+                Log.i("TAG", "onCreate: Inserting TopRateddata in database QUERY");
+                Log.i("TAG", "onCreate: CurrentTimeStamp" + getDateTime());
+                for (Result i : results) {
+                    i.setType(TYPE);
+                    i.setLastTimeStamp(getDateTime());
+                    i.setPosterPath(imageUrl + i.getPosterPath());
+                    resultDao.insert(i);
+
+                }
+
+
+                if (iBlockExecutor != null)
+                    iBlockExecutor.executeThis();
+
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.i("TAG", "onFailure: " + t.getMessage());
+
+            }
+        });
+
     }
 
     private String getDateTime() {

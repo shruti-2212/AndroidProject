@@ -14,6 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:gravity="center"
 
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp">
@@ -31,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/image_logo"
-            android:visibility="gone">
+            >
 
             <Button
                 android:id="@+id/login_button"
@@ -60,6 +61,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+
+                    <TextView
+                        android:id="@+id/tv_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="USEREMAIL"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
+
                     <EditText
                         android:id="@+id/et_username"
                         android:layout_width="match_parent"
@@ -73,16 +85,6 @@
                         android:textColor="@color/white"
 
                         android:textSize="15dp" />
-
-                    <TextView
-                        android:id="@+id/tv_username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="USEREMAIL"
-                        android:textColor="@color/white"
-                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -91,6 +93,15 @@
                     android:layout_marginTop="20dp"
                     android:orientation="horizontal">
 
+                    <TextView
+                        android:id="@+id/tv_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="PASSWORD"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
                     <EditText
                         android:id="@+id/et_password"
                         android:layout_width="match_parent"
@@ -102,16 +113,6 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textSize="15dp" />
-
-                    <TextView
-                        android:id="@+id/tv_password"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="PASSWORD"
                         android:textColor="@color/white"
                         android:textSize="15dp" />
                 </LinearLayout>
@@ -139,7 +140,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="30dp"
-        android:visibility="gone">
+        >
 
         <Button
             android:id="@+id/btn_signup"
