@@ -383,7 +383,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
     }
 
     @Override
-    public boolean onNavigationItemSelected( MenuItem menuItem) {
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_movies: {
                 startActivity(getIntent());
@@ -399,9 +399,9 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
                 editor.remove("login");
                 editor.commit();*/
 
-                PreferenceUtils.saveId(0,this);
+                PreferenceUtils.saveId(0, this);
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("From logout",true);
+                intent.putExtra("From logout", true);
                 startActivity(intent);
                 finish();
                 break;

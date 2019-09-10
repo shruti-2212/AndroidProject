@@ -1,6 +1,9 @@
 package com.example.themoviesworld.Fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -46,8 +49,6 @@ public class PopularMovies extends Fragment {
     private RecyclerView recyclerView;
 
 
-
-
     private ResultDao resultDao;
 
 
@@ -62,6 +63,7 @@ public class PopularMovies extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
     // TODO: Rename and change types and number of parameters
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,11 +71,12 @@ public class PopularMovies extends Fragment {
         View view = inflater.inflate(R.layout.fragment_popular_movies, container, false);
         recyclerView = view.findViewById(R.id.recyclerView_popular_movies);
 
-        resultDao= MovieApp.getsUserDatabase().getResultDao();
-        Log.i("TAG", "onCreateView: Popular"+resultDao.getResult(TYPE2).size());
+        resultDao = MovieApp.getsUserDatabase().getResultDao();
+        Log.i("TAG", "onCreateView: Popular" + resultDao.getResult(TYPE2).size());
         setupRecyclerView(resultDao.getResult(TYPE2));
         return view;
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -88,8 +91,8 @@ public class PopularMovies extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        resultDao= MovieApp.getsUserDatabase().getResultDao();
-        Log.i("TAG", "onCreateView: Popular"+resultDao.getResult(TYPE2).size());
+        resultDao = MovieApp.getsUserDatabase().getResultDao();
+        Log.i("TAG", "onCreateView: Popular" + resultDao.getResult(TYPE2).size());
         setupRecyclerView(resultDao.getResult(TYPE2));
     }
 
@@ -113,9 +116,10 @@ public class PopularMovies extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
     public void setupRecyclerView(List<Result> mdata) {
         Log.i("TAG", "setupRecyclerView:Popular ");
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(),mdata);
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), mdata);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(recyclerAdapter);
     }

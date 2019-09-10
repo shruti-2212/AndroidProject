@@ -34,24 +34,23 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
 
 
-    Button button_login,button_sign_up,button_forgot_password;
-    EditText userEmail,password;
-    RelativeLayout rr1,rr2,rr3;
+    Button button_login, button_sign_up, button_forgot_password;
+    EditText userEmail, password;
+    RelativeLayout rr1, rr2, rr3;
     SimpleDateFormat dateFormat = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
 
-
-//    private UserDatabase database;
+    //    private UserDatabase database;
     private UserDao userDao;
     private ProgressDialog progressDialog;
-    float loginTimeDiff,loginTimeDiffInHrs;
+    float loginTimeDiff, loginTimeDiffInHrs;
 
     Handler handler = new Handler();
-    Runnable runnable= new Runnable() {
+    Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            Log.i("TAG", "run: Current Thread"+Thread.currentThread());
+            Log.i("TAG", "run: Current Thread" + Thread.currentThread());
             rr1.setVisibility(View.VISIBLE);
             rr2.setVisibility(View.VISIBLE);
             rr3.setVisibility(View.VISIBLE);
@@ -71,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-           /* String Login = sharedPreferences.getString("login", null);*/
-            //Log.i("TAG", "onCreate: shared preference" + id);
-        if(userDao.getUserCount()!=0&&PreferenceUtils.getId(getApplicationContext()) != 0) {
+        /* String Login = sharedPreferences.getString("login", null);*/
+        //Log.i("TAG", "onCreate: shared preference" + id);
+        if (userDao.getUserCount() != 0 && PreferenceUtils.getId(getApplicationContext()) != 0) {
             int id = PreferenceUtils.getId(getApplicationContext());
             Log.i("Tag", "USer Id is" + id);
             String lastLoginTime = userDao.getUser(id).getUserLoginTime();
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Tag", "Login time diff:" + loginTimeDiff);
             Log.i("Tag", "Login time diff in hrs:" + loginTimeDiffInHrs);
 
-            if (  loginTimeDiffInHrs < 24.0) {
+            if (loginTimeDiffInHrs < 24.0) {
 
                 Intent i = new Intent(this, LayoutActivity.class);
                 i.putExtra("User Name", userDao.getUser(id).getFirst_name());
@@ -105,96 +104,96 @@ public class MainActivity extends AppCompatActivity {
                 || sharedPreferences==null
                 || (getIntent().getBooleanExtra("From_Signup",false))==true
                 ||(getIntent().getBooleanExtra("From logout",false))==true) {}*/
-            setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
 
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Check User...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setProgress(0);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Check User...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setProgress(0);
 
 
-            rr1 = findViewById(R.id.rr_layout);
-            rr2 = findViewById(R.id.relative_layout);
-            rr3 = findViewById(R.id.rr_layout3);
+        rr1 = findViewById(R.id.rr_layout);
+        rr2 = findViewById(R.id.relative_layout);
+        rr3 = findViewById(R.id.rr_layout3);
 
-            userEmail = findViewById(R.id.et_username);
-            password = findViewById(R.id.et_password);
+        userEmail = findViewById(R.id.et_username);
+        password = findViewById(R.id.et_password);
 
-            Log.i("TAG", "onCreate: Current Thread" + Thread.currentThread());
-            handler.postDelayed(runnable, 2000);
+        Log.i("TAG", "onCreate: Current Thread" + Thread.currentThread());
+        handler.postDelayed(runnable, 2000);
 
-            button_login = findViewById(R.id.login_button);
-            button_sign_up = findViewById(R.id.btn_signup);
-            button_forgot_password = findViewById(R.id.btn_forgot_password);
+        button_login = findViewById(R.id.login_button);
+        button_sign_up = findViewById(R.id.btn_signup);
+        button_forgot_password = findViewById(R.id.btn_forgot_password);
 
-            button_sign_up.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-            button_login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        button_sign_up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        button_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                    final User user = userDao.getuser(userEmail.getText().toString(), password.getText().toString());
-                    if (emptyValidation()) {
-                        Toast.makeText(MainActivity.this, "UserName and password fields cannot be empty", Toast.LENGTH_LONG).show();
-                    } else {
-                        progressDialog.show();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (user != null) {
+                final User user = userDao.getuser(userEmail.getText().toString(), password.getText().toString());
+                if (emptyValidation()) {
+                    Toast.makeText(MainActivity.this, "UserName and password fields cannot be empty", Toast.LENGTH_LONG).show();
+                } else {
+                    progressDialog.show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (user != null) {
 
-                                   user.setUserLoginTime(dateFormat.format(new Date()));
-                                   userDao.update(user);
-                                    Log.i("Tag","Setting user login time"+user.getUserLoginTime());
+                                user.setUserLoginTime(dateFormat.format(new Date()));
+                                userDao.update(user);
+                                Log.i("Tag", "Setting user login time" + user.getUserLoginTime());
 
                                     /*SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString("login", user.getEmail());
                                     editor.putInt("Id",user.getId());
                                     editor.commit();*/
-                                    PreferenceUtils.saveId(user.getId(),getApplicationContext());
-                                    Intent i = new Intent(MainActivity.this, LayoutActivity.class);
-                                    i.putExtra("User Name", user.getFirst_name());
-                                    i.putExtra("ID",user.getId());
-                                    startActivity(i);
-                                    finish();
-                                } else {
-                                    Toast.makeText(MainActivity.this, "User not registered", Toast.LENGTH_LONG).show();
+                                PreferenceUtils.saveId(user.getId(), getApplicationContext());
+                                Intent i = new Intent(MainActivity.this, LayoutActivity.class);
+                                i.putExtra("User Name", user.getFirst_name());
+                                i.putExtra("ID", user.getId());
+                                startActivity(i);
+                                finish();
+                            } else {
+                                Toast.makeText(MainActivity.this, "User not registered", Toast.LENGTH_LONG).show();
 
-                                }
-                                progressDialog.dismiss();
                             }
-                        }, 1000);
-                        //Intent intent = new Intent(MainActivity.this, LayoutActivity.class);
-                        //startActivity(intent);
-                    }
-
+                            progressDialog.dismiss();
+                        }
+                    }, 1000);
+                    //Intent intent = new Intent(MainActivity.this, LayoutActivity.class);
+                    //startActivity(intent);
                 }
-            });
 
-            button_forgot_password.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this, ChangePasswordActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
+            }
+        });
 
+        button_forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ChangePasswordActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
     }
+
     private boolean emptyValidation() {
         if (TextUtils.isEmpty(userEmail.getText().toString()) || TextUtils.isEmpty(password.getText().toString())) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }

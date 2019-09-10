@@ -18,7 +18,7 @@ public class MovieApp extends Application {
     public void onCreate() {
         super.onCreate();
         // Memory intensive.
-        sUserDatabase= Room.databaseBuilder(this, UserDatabase.class, "mi-database.db")
+        sUserDatabase = Room.databaseBuilder(this, UserDatabase.class, "mi-database.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();

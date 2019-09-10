@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.themoviesworld.Activities.MovieDetailActivity;
-import com.example.themoviesworld.Fragments.LatestMovies;
 import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.R;
 
@@ -31,7 +30,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public RecyclerAdapter(Context mContext, List<Result> mdata) {
         this.mContext = mContext;
         this.mdata = mdata;
-        options = new RequestOptions().centerCrop().override(100,150).placeholder(R.drawable.loading_shape).error(R.drawable.loading_shape);
+        options = new RequestOptions().centerCrop().override(100,150).placeholder(R.drawable.drawable_loading_shape).error(R.drawable.drawable_loading_shape);
     }
 
     @NonNull

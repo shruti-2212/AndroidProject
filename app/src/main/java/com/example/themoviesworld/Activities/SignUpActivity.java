@@ -22,9 +22,9 @@ import com.example.themoviesworld.UserDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText firstName,LastName,Email,password,confirmPassword;
+    EditText firstName, LastName, Email, password, confirmPassword;
     Button signup;
-//    private UserDatabase userDatabase;
+    //    private UserDatabase userDatabase;
     private UserDao userDao;
     private ProgressDialog progressDialog;
 
@@ -43,29 +43,26 @@ public class SignUpActivity extends AppCompatActivity {
 //                .allowMainThreadQueries()
 //                .build();
 
-        userDao= MovieApp.getsUserDatabase().getUserDao();
+        userDao = MovieApp.getsUserDatabase().getUserDao();
 
-        firstName=findViewById(R.id.et_firstname_signup);
-        LastName=findViewById(R.id.et_lastname_signup);
+        firstName = findViewById(R.id.et_firstname_signup);
+        LastName = findViewById(R.id.et_lastname_signup);
         password = findViewById(R.id.et_password_signup);
-        confirmPassword=findViewById(R.id.et_confirm_password_signup);
-        Email=findViewById(R.id.et_usermail_signup);
+        confirmPassword = findViewById(R.id.et_confirm_password_signup);
+        Email = findViewById(R.id.et_usermail_signup);
 
-        signup=findViewById(R.id.signup_button_signup);
+        signup = findViewById(R.id.signup_button_signup);
 
         signup.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Log.i("TAG", "onClick: ");
-                if(!(password.getText().toString()).equals(confirmPassword.getText().toString()))
-                {
-                    Toast.makeText(SignUpActivity.this,"Password and confrim Password field shold match",Toast.LENGTH_LONG).show();
-                }
-                else if(isEmpty()){
-                    Toast.makeText(SignUpActivity.this,"Fields cannot be left empty",Toast.LENGTH_LONG).show();
-                }
-                else{
+                if (!(password.getText().toString()).equals(confirmPassword.getText().toString())) {
+                    Toast.makeText(SignUpActivity.this, "Password and confrim Password field shold match", Toast.LENGTH_LONG).show();
+                } else if (isEmpty()) {
+                    Toast.makeText(SignUpActivity.this, "Fields cannot be left empty", Toast.LENGTH_LONG).show();
+                } else {
                     progressDialog.show();
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -75,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
                             userDao.insert(user);
                             progressDialog.dismiss();
                             Intent i = new Intent(SignUpActivity.this, MainActivity.class);
-                            i.putExtra("From_Signup",true);
+                            i.putExtra("From_Signup", true);
                             startActivity(i);
                             finish();
                         }
@@ -86,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
     private boolean isEmpty() {
         if (TextUtils.isEmpty(Email.getText().toString()) ||
                 TextUtils.isEmpty(password.getText().toString()) ||

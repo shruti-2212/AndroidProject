@@ -1,7 +1,6 @@
 package com.example.themoviesworld.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import com.example.themoviesworld.MovieApp;
 import com.example.themoviesworld.dao.UserDao;
 import com.example.themoviesworld.Models.User;
 import com.example.themoviesworld.R;
-import com.example.themoviesworld.UserDatabase;
 
 public class ChangePasswordActivity extends AppCompatActivity {
     TextView password,confirmPassword,usermail;
@@ -26,7 +24,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.forgot_password_layout);
+        setContentView(R.layout.layout_forgot_password);
         password=findViewById(R.id.et_password_change_password);
         confirmPassword=findViewById(R.id.et_confirm_password_change_password);
         usermail=findViewById(R.id.et_usermail_change_password);
