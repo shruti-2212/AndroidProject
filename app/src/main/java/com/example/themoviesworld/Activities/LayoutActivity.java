@@ -80,125 +80,31 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
     Date lastTimeUM, lastTimePM, lastTimeTRM, currentTime;
 
 
-    private void callApiTopRated(BlockExecutor iBlockExecutor) {
+    private void callApiTopRated(Api api, BlockExecutor iBlockExecutor) {
         Log.i("TAG", "Inside callAPITopRated");
 
-        Api api = createApiRequest();
         Call iCallback = api.getTopRatedMovies();
         implementApiResponse(TYPE1, iCallback, iBlockExecutor);
     }
-    /*.enqueue(new Callback<Example>() {*/
-           /* @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
-                Example example = response.body();
-
-                List<Result> results = example.getResults();
-                Log.i("TAG", "onResponse: " + example.getTotalResults() + example + " " + results.size());
-
-//
-                resultDao.deleteByType(TYPE1);
-                Log.i("TAG", "onCreate: Inserting TopRateddata in database QUERY");
-                Log.i("TAG", "onCreate: CurrentTimeStamp" + getDateTime());
-                for (Result i : results) {
-                    i.setType(TYPE1);
-                    i.setLastTimeStamp(getDateTime());
-                    i.setPosterPath(imageUrl + i.getPosterPath());
-                    resultDao.insert(i);
-
-                }
 
 
-                if (iBlockExecutor != null)
-                    iBlockExecutor.executeThis();
-            }
-*/
-
-           /* @Override
-            public void onFailure(Call<Example> call, Throwable t) {
-
-
-            }
-        });
-*/
-
-
-    private void callApiPopularMovies(BlockExecutor iBlockExecutor) {
+    private void callApiPopularMovies(Api api, BlockExecutor iBlockExecutor) {
         Log.i("TAG", "Inside callAPIPopularMovies");
         Log.i("TAG", "onCreate: Popular movies");
 
-        Api api = createApiRequest();
 
         Call iCallback = api.getPopularMovies();
-        implementApiResponse(TYPE2, iCallback, iBlockExecutor);/*.enqueue(new Callback<Example>() {
-            @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
-                Example example = response.body();
-
-                List<Result> results = example.getResults();
-                Log.i("TAG", "onResponse: " + example.getTotalResults() + example + " " + results.size());
-
-//
-                resultDao.deleteByType(TYPE2);
-
-                Log.i("TAG", "onCreate: Inserting Popular data in database QUERY");
-                Log.i("TAG", "onCreate: CurrentTimeStamp" + getDateTime() + results.size());
-                for (Result i : results) {
-                    i.setType(TYPE2);
-                    i.setPosterPath(imageUrl + i.getPosterPath());
-                    i.setLastTimeStamp(getDateTime());
-                    resultDao.insert(i);
-
-                }
-
-                if (iBlockExecutor != null)
-                    iBlockExecutor.executeThis();
-            }
-
-            @Override
-            public void onFailure(Call<Example> call, Throwable t) {
-
-            }
-        });*/
+        implementApiResponse(TYPE2, iCallback, iBlockExecutor);
     }
 
-    public void callApiUpcoming(BlockExecutor iBlockExecutor) {
+    public void callApiUpcoming(Api api, BlockExecutor iBlockExecutor) {
         Log.i("TAG", "Inside callAPIUpcoming");
 
 
-        Api api = createApiRequest();
         Log.i("TAG", "In callApiUpcoming calling api");
         Call iCallback = api.getUpcomingMovies();
         implementApiResponse(TYPE3, iCallback, iBlockExecutor);
-    }/*.enqueue(new Callback<Example>() {
-            @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
-                Example example = response.body();
-
-                List<Result> results = example.getResults();
-                Log.i("TAG", "onResponse: LatestMovies" + example.getTotalResults() + example + " " + results.size());
-
-                Log.i("TAG", "onCreate: Inserting upcoming movie data in database QUERY");
-                Log.i("TAG", "onCreate: CurrentTimeStamp" + getDateTime() + results.size());
-
-                resultDao.deleteByType(TYPE3);
-
-                for (Result i : results) {
-                    i.setType(TYPE3);
-                    i.setLastTimeStamp(getDateTime());
-                    i.setPosterPath(imageUrl + i.getPosterPath());
-                    resultDao.insert(i);
-                }
-
-                if (iBlockExecutor != null)
-                    iBlockExecutor.executeThis();
-            }
-
-            @Override
-            public void onFailure(Call<Example> call, Throwable t) {
-                Log.i("TAG", "onFailure: " + t.getMessage());
-
-            }*/
-    //  });
+    }
 
 
     public Api createApiRequest() {
@@ -297,6 +203,9 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         actionBarDrawerToggle.syncState();
 
         List<Result> resultList = resultDao.getResult();
+
+        Api api = createApiRequest();
+
         Log.i("TAG", "Check Database Empty" + resultList);
 
         if (resultList == null || resultList.size() == 0) {
@@ -305,13 +214,13 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
 
             Log.i("TAG", "On Database Empty");
 
-            callApiUpcoming(new BlockExecutor() {
+            callApiUpcoming(api, new BlockExecutor() {
                 @Override
                 public void executeThis() {
-                    callApiTopRated(new BlockExecutor() {
+                    callApiTopRated(api, new BlockExecutor() {
                         @Override
                         public void executeThis() {
-                            callApiPopularMovies(new BlockExecutor() {
+                            callApiPopularMovies(api, new BlockExecutor() {
                                 @Override
                                 public void executeThis() {
                                     updateUI();
@@ -349,16 +258,16 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
             }
 
             if (hrsTRM >= 4.0) {
-                callApiTopRated(new BlockExecutor() {
+                callApiTopRated(api, new BlockExecutor() {
                     @Override
                     public void executeThis() {
 
                         if (hrsUM >= 4.0) {
-                            callApiUpcoming(new BlockExecutor() {
+                            callApiUpcoming(api, new BlockExecutor() {
                                 @Override
                                 public void executeThis() {
                                     if (hrsPM >= 4.0) {
-                                        callApiPopularMovies(new BlockExecutor() {
+                                        callApiPopularMovies(api, new BlockExecutor() {
                                             @Override
                                             public void executeThis() {
                                                 // Update UI if required
