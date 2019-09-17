@@ -13,17 +13,16 @@ import com.example.themoviesworld.Fragments.TopRatedMovies;
 public class PageAdapter extends FragmentPagerAdapter {
     private int numberOfTabs;
 
-    public PageAdapter(FragmentManager fm,int numberOfTabs) {
+    public PageAdapter(FragmentManager fm, int numberOfTabs) {
         super(fm);
-        this.numberOfTabs=numberOfTabs;
+        this.numberOfTabs = numberOfTabs;
         Log.i("TAG", "Inside PageAdapter: ");
     }
 
 
     @Override
     public Fragment getItem(int position) {
-        switch (position)
-        {
+        switch (position) {
             case 0: {
                 Log.i("TAG", "getItem: Item0");
                 return new LatestMovies();

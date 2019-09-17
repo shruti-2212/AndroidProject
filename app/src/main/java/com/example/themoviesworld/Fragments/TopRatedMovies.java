@@ -3,43 +3,24 @@ package com.example.themoviesworld.Fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.themoviesworld.Adapters.RecyclerAdapter;
-import com.example.themoviesworld.Api.Api;
-import com.example.themoviesworld.Models.Example;
 import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.MovieApp;
 import com.example.themoviesworld.R;
-import com.example.themoviesworld.UserDatabase;
 import com.example.themoviesworld.dao.ResultDao;
-import com.example.themoviesworld.dao.UserDao;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.themoviesworld.DBConstants.TYPE1;
-import static com.example.themoviesworld.DBConstants.TYPE2;
 
 
 public class TopRatedMovies extends Fragment {
@@ -79,8 +60,8 @@ public class TopRatedMovies extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_top_rated_movies, container, false);
         recyclerView = view.findViewById(R.id.recyclerView_top_rated_movies);
-        resultDao= MovieApp.getsUserDatabase().getResultDao();
-        Log.i("TAG", "onCreateView: TopRated"+resultDao.getResult(TYPE1).size());
+        resultDao = MovieApp.getUserDatabase().getResultDao();
+        Log.i("TAG", "onCreateView: TopRated" + resultDao.getResult(TYPE1).size());
         setupRecyclerView(resultDao.getResult(TYPE1));
 
         return view;

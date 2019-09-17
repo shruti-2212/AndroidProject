@@ -1,22 +1,29 @@
 package com.example.themoviesworld;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.room.Room;
 
-import com.example.themoviesworld.Activities.LayoutActivity;
-
 public class MovieApp extends Application {
 
-    public static UserDatabase getsUserDatabase() {
+    private static UserDatabase sUserDatabase;
+    private static Context sContext;
+
+    public static UserDatabase getUserDatabase() {
         return sUserDatabase;
     }
 
-    private static UserDatabase sUserDatabase;
+    public static Context getContext() {
+        return sContext;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sContext = this;
+
         // Memory intensive.
         sUserDatabase = Room.databaseBuilder(this, UserDatabase.class, "mi-database.db")
                 .allowMainThreadQueries()

@@ -1,17 +1,6 @@
 package com.example.themoviesworld.Activities;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,26 +9,32 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.example.themoviesworld.Adapters.PageAdapter;
 import com.example.themoviesworld.Api.Api;
 import com.example.themoviesworld.BlockExecutor;
 import com.example.themoviesworld.DBConstants;
 import com.example.themoviesworld.Fragments.LatestMovies;
 import com.example.themoviesworld.Fragments.PopularMovies;
 import com.example.themoviesworld.Fragments.TopRatedMovies;
-import com.example.themoviesworld.Adapters.PageAdapter;
 import com.example.themoviesworld.Models.Example;
 import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.MovieApp;
 import com.example.themoviesworld.PreferenceUtils;
 import com.example.themoviesworld.R;
-import com.example.themoviesworld.UserDatabase;
 import com.example.themoviesworld.dao.ResultDao;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -170,7 +165,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_layout);
 
-        resultDao = MovieApp.getsUserDatabase().getResultDao();
+        resultDao = MovieApp.getUserDatabase().getResultDao();
 
         toolbar = findViewById(R.id.toolbar);
         viewPager = findViewById(R.id.view_pager);
@@ -214,6 +209,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
 
             Log.i("TAG", "On Database Empty");
 
+            // FIXME Start using some architectural pattern to model such implementation in a modular and flexible
             callApiUpcoming(api, new BlockExecutor() {
                 @Override
                 public void executeThis() {
@@ -233,6 +229,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         } else {
             updateUI();
 
+            // FIXME Move this code to a new DateTime Utils class
             currentTime = new Date();
             Log.i("TAG", "Calculating time" + currentTime);
             try {
@@ -291,6 +288,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         pagerAdapter = new PageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setOffscreenPageLimit(1);
         viewPager.setAdapter(pagerAdapter);
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
@@ -313,6 +311,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
 
             }
         });
+
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         // Update the visibility
@@ -329,35 +328,28 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else
+        } else {
             super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.nav_movies: {
+            case R.id.nav_movies:
                 startActivity(getIntent());
                 break;
+            case R.id.Logout:
+                PreferenceUtils.saveId(0);
 
-            }
-            case R.id.Logout: {
-
-                /*SharedPreferences sharedPreferences = getSharedPreferences("Preferences", 0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                sharedPreferences.getString("login", null);
-                Log.i("Tag", "Logout" + sharedPreferences.getString("login", null));
-                editor.remove("login");
-                editor.commit();*/
-
-                PreferenceUtils.saveId(0, this);
+                // TODO Add one more method in com.example.themoviesworld.utils.ActivityUtils to support this type of intent creation
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("From logout", true);
                 startActivity(intent);
                 finish();
                 break;
-            }
         }
+
         drawer.closeDrawer(GravityCompat.START);
 
         return true;

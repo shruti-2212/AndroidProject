@@ -4,8 +4,6 @@ package com.example.themoviesworld.Models;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -14,7 +12,6 @@ public class Result {
 
     @PrimaryKey(autoGenerate = true)
     private int idMain;
-
 
 
     private String lastTimeStamp;
@@ -81,6 +78,7 @@ public class Result {
     public void setType(String type) {
         this.type = type;
     }
+
     public String getLastTimeStamp() {
         return lastTimeStamp;
     }

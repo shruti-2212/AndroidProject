@@ -1,8 +1,5 @@
 package com.example.themoviesworld.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.themoviesworld.MovieApp;
-import com.example.themoviesworld.dao.UserDao;
-import com.example.themoviesworld.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.themoviesworld.Models.User;
-import com.example.themoviesworld.UserDatabase;
+import com.example.themoviesworld.MovieApp;
+import com.example.themoviesworld.R;
+import com.example.themoviesworld.dao.UserDao;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -43,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
 //                .allowMainThreadQueries()
 //                .build();
 
-        userDao = MovieApp.getsUserDatabase().getUserDao();
+        userDao = MovieApp.getUserDatabase().getUserDao();
 
         firstName = findViewById(R.id.et_firstname_signup);
         LastName = findViewById(R.id.et_lastname_signup);

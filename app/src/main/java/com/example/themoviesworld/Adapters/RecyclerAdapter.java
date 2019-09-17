@@ -30,7 +30,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public RecyclerAdapter(Context mContext, List<Result> mdata) {
         this.mContext = mContext;
         this.mdata = mdata;
-        options = new RequestOptions().centerCrop().override(100,150).placeholder(R.drawable.drawable_loading_shape).error(R.drawable.drawable_loading_shape);
+        options = new RequestOptions().centerCrop().override(100, 150).placeholder(R.drawable.drawable_loading_shape).error(R.drawable.drawable_loading_shape);
     }
 
     @NonNull
@@ -38,20 +38,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         final LayoutInflater inflater = LayoutInflater.from(mContext);
-        view = inflater.inflate(R.layout.recycler_item_view,parent,false);
+        view = inflater.inflate(R.layout.recycler_item_view, parent, false);
         final MyViewHolder viewHolder = new MyViewHolder(view);
         viewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MovieDetailActivity.class);
                 Bundle bundle = new Bundle();
-                Log.i("TAG", "onClick: "+viewHolder.container);
-                bundle.putString("Title",mdata.get(viewHolder.getAdapterPosition()).getTitle());
-                bundle.putString("Release Date",mdata.get(viewHolder.getAdapterPosition()).getReleaseDate());
-                bundle.putString("Description",mdata.get(viewHolder.getAdapterPosition()).getOverview());
-                bundle.putString("ImagePath",mdata.get(viewHolder.getAdapterPosition()).getPosterPath());
+                Log.i("TAG", "onClick: " + viewHolder.container);
+                bundle.putString("Title", mdata.get(viewHolder.getAdapterPosition()).getTitle());
+                bundle.putString("Release Date", mdata.get(viewHolder.getAdapterPosition()).getReleaseDate());
+                bundle.putString("Description", mdata.get(viewHolder.getAdapterPosition()).getOverview());
+                bundle.putString("ImagePath", mdata.get(viewHolder.getAdapterPosition()).getPosterPath());
 
-                intent.putExtra("Bundle",bundle);
+                intent.putExtra("Bundle", bundle);
 
                 mContext.startActivity(intent);
 
@@ -64,7 +64,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.title.setText(mdata.get(position).getTitle());
-       // holder.rating.setText( mdata.get(position).getPopularity());
+        // holder.rating.setText( mdata.get(position).getPopularity());
 
         holder.releaseDate.setText(mdata.get(position).getReleaseDate());
 
@@ -78,7 +78,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         return mdata.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView title;
         TextView rating;
@@ -94,7 +94,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
             title = itemView.findViewById(R.id.movie_name);
             rating = itemView.findViewById(R.id.popularity);
-            releaseDate= itemView.findViewById(R.id.release_date);
+            releaseDate = itemView.findViewById(R.id.release_date);
             studio = itemView.findViewById(R.id.studio);
             im_thumbnail = itemView.findViewById(R.id.thumbnail);
             container = itemView.findViewById(R.id.container);

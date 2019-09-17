@@ -12,16 +12,16 @@ import com.example.themoviesworld.Models.User;
 public interface UserDao {
 
     @Insert
-    public void insert(User user);
+    void insert(User user);
 
     @Delete
-    public void delete(User user);
+    void delete(User user);
 
     @Query("Select Count(*) from user")
     int getUserCount();
 
     @Query("Select * from user where email =:mail and password =:pass")
-    User getuser(String mail,String pass);
+    User getuser(String mail, String pass);
 
     @Query("Select * from user where id=:id")
     User getUser(int id);

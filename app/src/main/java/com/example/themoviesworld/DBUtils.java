@@ -1,13 +1,7 @@
 package com.example.themoviesworld;
 
-import android.content.Context;
-
-import androidx.room.Room;
-
-import com.example.themoviesworld.Activities.LayoutActivity;
-import com.example.themoviesworld.dao.ResultDao;
-
 public class DBUtils implements DBConstants {
+    // TODO Make use of it for Database operations
 //    ResultDao createDBInstance(Context mContext)
 //    {
 //       UserDatabase userDatabase= Room.databaseBuilder(mContext, UserDatabase.class, "mi-database.db")
