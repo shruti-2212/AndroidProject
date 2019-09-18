@@ -14,7 +14,7 @@ public class Result {
     private int idMain;
 
 
-    private String lastTimeStamp;
+    private long lastTimeStamp;
 
 
     private String type;
@@ -79,11 +79,11 @@ public class Result {
         this.type = type;
     }
 
-    public String getLastTimeStamp() {
+    public long getLastTimeStamp() {
         return lastTimeStamp;
     }
 
-    public void setLastTimeStamp(String lastTimeStamp) {
+    public void setLastTimeStamp(long lastTimeStamp) {
         this.lastTimeStamp = lastTimeStamp;
     }
 

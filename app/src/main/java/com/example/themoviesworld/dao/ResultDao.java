@@ -29,7 +29,7 @@ public interface ResultDao {
     public void deleteAll();
 
     @Query("Select MAX(lastTimeStamp) from result where type=:type")
-    String getMaxTimeStamp(String type);
+    long getMaxTimeStamp(String type);
 
 
     @Update

@@ -27,7 +27,9 @@ import com.example.themoviesworld.Fragments.TopRatedMovies;
 import com.example.themoviesworld.Models.Example;
 import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.MovieApp;
-import com.example.themoviesworld.PreferenceUtils;
+import com.example.themoviesworld.utils.ActivityUtils;
+import com.example.themoviesworld.utils.DateTimeUtils;
+import com.example.themoviesworld.utils.PreferenceUtils;
 import com.example.themoviesworld.R;
 import com.example.themoviesworld.dao.ResultDao;
 import com.google.android.material.navigation.NavigationView;
@@ -52,9 +54,9 @@ import static java.lang.Math.abs;
 public class LayoutActivity extends AppCompatActivity implements PopularMovies.OnFragmentInteractionListener, LatestMovies.OnFragmentInteractionListener,
         TopRatedMovies.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener, DBConstants {
 
-    Toolbar toolbar;
-    ViewPager viewPager;
-    TabLayout tabLayout;
+    private Toolbar toolbar;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
     TabItem popularMovies;
     TabItem latestMovies;
     TabItem topRatedMovies;
@@ -72,7 +74,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
     float hrsTRM, hrsPM, hrsUM;
     long timeDiffrerenceTRM, timeDiffrerencePM, timeDiffrerenceUM;
 
-    Date lastTimeUM, lastTimePM, lastTimeTRM, currentTime;
+
 
 
     private void callApiTopRated(Api api, BlockExecutor iBlockExecutor) {
@@ -133,7 +135,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
                 Log.i("TAG", "onCreate: CurrentTimeStamp" + getDateTime());
                 for (Result i : results) {
                     i.setType(TYPE);
-                    i.setLastTimeStamp(getDateTime());
+                    i.setLastTimeStamp(DateTimeUtils.getCurrentTime());
                     i.setPosterPath(imageUrl + i.getPosterPath());
                     resultDao.insert(i);
 
@@ -230,29 +232,29 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
             updateUI();
 
             // FIXME Move this code to a new DateTime Utils class
-            currentTime = new Date();
-            Log.i("TAG", "Calculating time" + currentTime);
-            try {
-                Log.i("TAG", "Calculating time" + currentTime);
-                lastTimeTRM = dateFormat.parse(resultDao.getMaxTimeStamp(TYPE1));
-                lastTimePM = dateFormat.parse(resultDao.getMaxTimeStamp(TYPE2));
-                lastTimeUM = dateFormat.parse(resultDao.getMaxTimeStamp(TYPE3));
-                Log.i("TAG", "Time TRM : " + lastTimeTRM.getTime() + "-" + currentTime.getTime());
+            //currentTime = new Date();
+            Log.i("TAG", "Calculating time" + DateTimeUtils.getCurrentTime());
 
-                timeDiffrerenceTRM = abs(lastTimeTRM.getTime() - currentTime.getTime());
-                timeDiffrerencePM = abs(lastTimeTRM.getTime() - currentTime.getTime());
-                timeDiffrerenceUM = abs(lastTimeTRM.getTime() - currentTime.getTime());
+
+                long lastTimeTRM = resultDao.getMaxTimeStamp(TYPE1);
+                long lastTimePM = resultDao.getMaxTimeStamp(TYPE2);
+                long lastTimeUM =resultDao.getMaxTimeStamp(TYPE3);
+
+                Log.i("TAG", "Time TRM : " + lastTimeTRM + "-" + DateTimeUtils.getCurrentTime());
+
+                long currentTime=DateTimeUtils.getCurrentTime();
+
+                timeDiffrerenceTRM = DateTimeUtils.getTimeDifferenceinSeconds(lastTimeTRM,currentTime);
+                timeDiffrerencePM = DateTimeUtils.getTimeDifferenceinSeconds(lastTimePM,currentTime);
+                timeDiffrerenceUM =DateTimeUtils.getTimeDifferenceinSeconds(lastTimeUM,currentTime);
+
                 Log.i("TAG", "Time TRM : " + timeDiffrerenceTRM);
 
                 hrsTRM = (timeDiffrerenceTRM / TO_HRS);
                 hrsPM = (timeDiffrerencePM / TO_HRS);
                 hrsUM = (timeDiffrerenceUM / TO_HRS);
-                Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
-            } catch (Exception e) {
 
-                Log.i("TAG", "onCreate: Inside Catch Exception Occured");
-                e.printStackTrace();
-            }
+                Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
 
             if (hrsTRM >= 4.0) {
                 callApiTopRated(api, new BlockExecutor() {
@@ -343,10 +345,9 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
                 PreferenceUtils.saveId(0);
 
                 // TODO Add one more method in com.example.themoviesworld.utils.ActivityUtils to support this type of intent creation
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent();
                 intent.putExtra("From logout", true);
-                startActivity(intent);
-                finish();
+                ActivityUtils.launchActivitywithdata(intent,this, MainActivity.class);
                 break;
         }
 

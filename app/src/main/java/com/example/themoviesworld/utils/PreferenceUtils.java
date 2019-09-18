@@ -1,6 +1,10 @@
-package com.example.themoviesworld;
+package com.example.themoviesworld.utils;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.example.themoviesworld.DBConstants;
+import com.example.themoviesworld.MovieApp;
 
 public class PreferenceUtils {
 
@@ -11,7 +15,8 @@ public class PreferenceUtils {
         return editor.commit();
     }
 
-    public static int getId() {
+    public static int getId()
+     {
         SharedPreferences sharedPreferences = MovieApp.getContext().getSharedPreferences(DBConstants.PREF_STRING, 0);
         return sharedPreferences.getInt("ID", 0);
     }
