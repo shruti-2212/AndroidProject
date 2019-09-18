@@ -55,11 +55,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< Updated upstream
         userDao = MovieApp.getUserDatabase().getUserDao();
 
         // Check if there are any existing users logged in within the defined time limit
         if (userDao.getUserCount() != 0 && PreferenceUtils.getId() != 0) {
             int id = PreferenceUtils.getId();
+=======
+        sharedPreferences = getApplicationContext().getSharedPreferences("Preferences", 0);
+
+        userDao = MovieApp.getsUserDatabase().getUserDao();
+
+        if (userDao.getUserCount() != 0 && PreferenceUtils.getId(getApplicationContext()) != 0) {
+            int id = PreferenceUtils.getId(getApplicationContext());
+>>>>>>> Stashed changes
             Log.i("Tag", "USer Id is" + id);
 
             String lastLoginTime = userDao.getUser(id).getUserLoginTime();
@@ -94,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         setContentView(R.layout.activity_main);
 
         progressDialog = new ProgressDialog(this);
