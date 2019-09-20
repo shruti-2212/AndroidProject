@@ -21,9 +21,14 @@ import com.example.themoviesworld.utils.ActivityUtils;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText firstName, LastName, Email, password, confirmPassword;
-    Button signup;
-    //    private UserDatabase userDatabase;
+    private EditText firstName;
+    private EditText LastName;
+    private EditText Email;
+    private EditText password;
+    private EditText confirmPassword;
+
+    private  Button signup;
+
     private UserDao userDao;
     private ProgressDialog progressDialog;
 
@@ -72,7 +77,7 @@ public class SignUpActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             Intent i = new Intent();
                             i.putExtra("From_Signup", true);
-                            ActivityUtils.launchActivitywithdata(i,SignUpActivity.this, MainActivity.class);
+                            ActivityUtils.launchActivityWithData(i,SignUpActivity.this, MainActivity.class);
                         }
                     }, 1000);
 

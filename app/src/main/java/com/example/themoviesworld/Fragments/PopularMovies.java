@@ -25,13 +25,12 @@ import static com.example.themoviesworld.DBConstants.TYPE2;
 
 
 public class PopularMovies extends Fragment {
-    private RecyclerView recyclerView;
 
+    private RecyclerView recyclerView;
 
     private ResultDao resultDao;
 
-
-    private OnFragmentInteractionListener mListener;
+    //private OnFragmentInteractionListener mListener;
 
     public PopularMovies() {
         // Required empty public constructor
@@ -56,7 +55,7 @@ public class PopularMovies extends Fragment {
         return view;
     }
 
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -65,7 +64,7 @@ public class PopularMovies extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
+    }*/
 
     @Override
     public void onResume() {
@@ -75,11 +74,11 @@ public class PopularMovies extends Fragment {
         setupRecyclerView(resultDao.getResult(TYPE2));
     }
 
-    @Override
+    /*@Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this
@@ -91,11 +90,10 @@ public class PopularMovies extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+   /* public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
+    }*/
     public void setupRecyclerView(List<Result> mdata) {
         Log.i("TAG", "setupRecyclerView:Popular ");
         RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), mdata);

@@ -6,4 +6,5 @@ public interface DBConstants {
     String TYPE3 = "UPCOMING_MOVIES";
     String PREF_STRING = "Preference";
     float TO_HRS = 1000 * 60 * 60;
+    String imageUrl = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/";
 }

@@ -30,13 +30,7 @@ public class LatestMovies extends Fragment {
     //    private UserDatabase userDatabase;
     private ResultDao resultDao;
 
-
-    private List<Result> results, mdata;
-    private SwipeRefreshLayout swipeRefreshLayout;
-
-
-    private OnFragmentInteractionListener mListener;
-
+    // private OnFragmentInteractionListener mListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,13 +52,13 @@ public class LatestMovies extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+  /*  public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -73,13 +67,13 @@ public class LatestMovies extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
-
-    @Override
+    }*/
+    /*@Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
+    }*/
+
 
     public void setupRecyclerView(List<Result> mdata) {
         Log.i("TAG", "setupRecyclerView:Upcoming ");
@@ -89,9 +83,9 @@ public class LatestMovies extends Fragment {
     }
 
 
-    public interface OnFragmentInteractionListener {
+   /* public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
 
-    }
+    }*/
 }

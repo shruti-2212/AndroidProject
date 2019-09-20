@@ -28,6 +28,7 @@ import com.example.themoviesworld.Models.Example;
 import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.MovieApp;
 import com.example.themoviesworld.utils.ActivityUtils;
+import com.example.themoviesworld.utils.ApiCallsUtils;
 import com.example.themoviesworld.utils.DateTimeUtils;
 import com.example.themoviesworld.utils.PreferenceUtils;
 import com.example.themoviesworld.R;
@@ -51,33 +52,45 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.lang.Math.abs;
 
-public class LayoutActivity extends AppCompatActivity implements PopularMovies.OnFragmentInteractionListener, LatestMovies.OnFragmentInteractionListener,
-        TopRatedMovies.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener, DBConstants {
+public class LayoutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DBConstants {
 
     private Toolbar toolbar;
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    TabItem popularMovies;
-    TabItem latestMovies;
-    TabItem topRatedMovies;
-    PagerAdapter pagerAdapter;
-    DrawerLayout drawer;
-    ProgressBar progressBar;
-    String imageUrl = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/";
 
-    TextView nav_heading;
+    private TabItem popularMovies;
+    private TabItem latestMovies;
+    private TabItem topRatedMovies;
+
+    private PagerAdapter pagerAdapter;
+    private DrawerLayout drawer;
+    private ProgressBar progressBar;
+
+    private String imageUrl = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/";
+
+    private TextView nav_heading;
 
     private ResultDao resultDao;
 
-    SimpleDateFormat dateFormat;
+    private void callApi(String TYPE,Api api,BlockExecutor iBlockExecutor){
+        Call iCallback;
+        switch (TYPE){
+            case TYPE1:
+                iCallback=api.getTopRatedMovies();
+                break;
+            case TYPE2:
+                iCallback=api.getPopularMovies();
+                break;
+            case TYPE3:
+                iCallback=api.getUpcomingMovies();
+                break;
 
-    float hrsTRM, hrsPM, hrsUM;
-    long timeDiffrerenceTRM, timeDiffrerencePM, timeDiffrerenceUM;
-
-
-
-
-    private void callApiTopRated(Api api, BlockExecutor iBlockExecutor) {
+                default:
+                    iCallback=null;
+        }
+        implementApiResponse(TYPE,iCallback,iBlockExecutor);
+    }
+   /* private void callApiTopRated(Api api, BlockExecutor iBlockExecutor) {
         Log.i("TAG", "Inside callAPITopRated");
 
         Call iCallback = api.getTopRatedMovies();
@@ -102,7 +115,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         Call iCallback = api.getUpcomingMovies();
         implementApiResponse(TYPE3, iCallback, iBlockExecutor);
     }
-
+*/
 
     public Api createApiRequest() {
         Log.i("TAG", "Inside create Api Request function");
@@ -129,10 +142,10 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
                 List<Result> results = example.getResults();
                 Log.i("TAG", "onResponse: " + example.getTotalResults() + example + " " + results.size());
 
-//
                 resultDao.deleteByType(TYPE);
+
                 Log.i("TAG", "onCreate: Inserting TopRateddata in database QUERY");
-                Log.i("TAG", "onCreate: CurrentTimeStamp" + getDateTime());
+
                 for (Result i : results) {
                     i.setType(TYPE);
                     i.setLastTimeStamp(DateTimeUtils.getCurrentTime());
@@ -140,7 +153,6 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
                     resultDao.insert(i);
 
                 }
-
 
                 if (iBlockExecutor != null)
                     iBlockExecutor.executeThis();
@@ -154,12 +166,6 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
             }
         });
 
-    }
-
-    private String getDateTime() {
-
-        Date date = new Date();
-        return dateFormat.format(date);
     }
 
     @Override
@@ -178,8 +184,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         drawer = findViewById(R.id.drawer_layout);
         progressBar = findViewById(R.id.progress_bar);
 
-        dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
         NavigationView nview = findViewById(R.id.nav_drawer);
         setSupportActionBar(toolbar);
 
@@ -212,13 +217,13 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
             Log.i("TAG", "On Database Empty");
 
             // FIXME Start using some architectural pattern to model such implementation in a modular and flexible
-            callApiUpcoming(api, new BlockExecutor() {
+            callApi(TYPE3,api, new BlockExecutor() {
                 @Override
                 public void executeThis() {
-                    callApiTopRated(api, new BlockExecutor() {
+                    callApi(TYPE1,api, new BlockExecutor() {
                         @Override
                         public void executeThis() {
-                            callApiPopularMovies(api, new BlockExecutor() {
+                          callApi(TYPE2,api, new BlockExecutor() {
                                 @Override
                                 public void executeThis() {
                                     updateUI();
@@ -231,42 +236,36 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         } else {
             updateUI();
 
+
             // FIXME Move this code to a new DateTime Utils class
             //currentTime = new Date();
             Log.i("TAG", "Calculating time" + DateTimeUtils.getCurrentTime());
 
 
-                long lastTimeTRM = resultDao.getMaxTimeStamp(TYPE1);
-                long lastTimePM = resultDao.getMaxTimeStamp(TYPE2);
-                long lastTimeUM =resultDao.getMaxTimeStamp(TYPE3);
+            long lastTimeTRM = resultDao.getMaxTimeStamp(TYPE1);
+            long lastTimePM = resultDao.getMaxTimeStamp(TYPE2);
+            long lastTimeUM = resultDao.getMaxTimeStamp(TYPE3);
 
-                Log.i("TAG", "Time TRM : " + lastTimeTRM + "-" + DateTimeUtils.getCurrentTime());
+            Log.i("TAG", "Time TRM : " + lastTimeTRM + "-" + DateTimeUtils.getCurrentTime());
 
-                long currentTime=DateTimeUtils.getCurrentTime();
+            long currentTime = DateTimeUtils.getCurrentTime();
 
-                timeDiffrerenceTRM = DateTimeUtils.getTimeDifferenceinSeconds(lastTimeTRM,currentTime);
-                timeDiffrerencePM = DateTimeUtils.getTimeDifferenceinSeconds(lastTimePM,currentTime);
-                timeDiffrerenceUM =DateTimeUtils.getTimeDifferenceinSeconds(lastTimeUM,currentTime);
+            float hrsTRM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimeTRM, currentTime)) / TO_HRS;
+            float hrsPM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimePM, currentTime)) / TO_HRS;
+            float hrsUM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimeUM, currentTime)) / TO_HRS;
 
-                Log.i("TAG", "Time TRM : " + timeDiffrerenceTRM);
-
-                hrsTRM = (timeDiffrerenceTRM / TO_HRS);
-                hrsPM = (timeDiffrerencePM / TO_HRS);
-                hrsUM = (timeDiffrerenceUM / TO_HRS);
-
-                Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
+            Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
 
             if (hrsTRM >= 4.0) {
-                callApiTopRated(api, new BlockExecutor() {
+                callApi(TYPE1,api, new BlockExecutor() {
                     @Override
                     public void executeThis() {
-
                         if (hrsUM >= 4.0) {
-                            callApiUpcoming(api, new BlockExecutor() {
+                            callApi(TYPE3,api, new BlockExecutor() {
                                 @Override
                                 public void executeThis() {
                                     if (hrsPM >= 4.0) {
-                                        callApiPopularMovies(api, new BlockExecutor() {
+                                        callApi(TYPE2,api, new BlockExecutor() {
                                             @Override
                                             public void executeThis() {
                                                 // Update UI if required
@@ -286,7 +285,9 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
     }
 
     private void updateUI() {
+
         Log.i("TAG", "onCreate:Layout Activity setting view pager ");
+
         pagerAdapter = new PageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setOffscreenPageLimit(1);
         viewPager.setAdapter(pagerAdapter);
@@ -321,10 +322,10 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
         progressBar.setVisibility(View.GONE);
     }
 
-    @Override
+    /*@Override
     public void onFragmentInteraction(Uri uri) {
 
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -347,7 +348,7 @@ public class LayoutActivity extends AppCompatActivity implements PopularMovies.O
                 // TODO Add one more method in com.example.themoviesworld.utils.ActivityUtils to support this type of intent creation
                 Intent intent = new Intent();
                 intent.putExtra("From logout", true);
-                ActivityUtils.launchActivitywithdata(intent,this, MainActivity.class);
+                ActivityUtils.launchActivityWithData(intent, this, MainActivity.class);
                 break;
         }
 

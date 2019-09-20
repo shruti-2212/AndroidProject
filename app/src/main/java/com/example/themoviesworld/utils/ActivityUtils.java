@@ -16,7 +16,7 @@ public class ActivityUtils {
         iContext.startActivity(intent);
         iContext.finish();
     }
-    public static void launchActivitywithdata(Intent i,Activity iContext,Class iClass){
+    public static void launchActivityWithData(Intent i, Activity iContext, Class iClass){
         ComponentName componentName= new ComponentName(iContext,iClass);
         i.setComponent(componentName);
         iContext.startActivity(i);

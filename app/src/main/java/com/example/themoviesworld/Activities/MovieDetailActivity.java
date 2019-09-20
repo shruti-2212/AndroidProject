@@ -15,8 +15,9 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 public class MovieDetailActivity extends AppCompatActivity {
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    String title;
+
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,6 @@ public class MovieDetailActivity extends AppCompatActivity {
                 }
             }
         });
-
 
     }
 }

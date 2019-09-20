@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -23,10 +22,6 @@ import com.example.themoviesworld.Models.User;
 import com.example.themoviesworld.utils.ActivityUtils;
 import com.example.themoviesworld.utils.DateTimeUtils;
 import com.example.themoviesworld.utils.ToastUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import static com.example.themoviesworld.DBConstants.TO_HRS;
 import static java.lang.Math.abs;
@@ -153,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                                 Intent i = new Intent();
                                 i.putExtra("User Name", user.getFirst_name());
                                 i.putExtra("ID", user.getId());
-                                ActivityUtils.launchActivitywithdata(i,MainActivity.this, LayoutActivity.class);
+                                ActivityUtils.launchActivityWithData(i,MainActivity.this, LayoutActivity.class);
                             } else {
                                 ToastUtils.showToast("User not registered");
 
