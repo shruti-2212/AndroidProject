@@ -239,10 +239,10 @@ public class LayoutActivity extends AppCompatActivity implements NavigationView.
 
             // FIXME Move this code to a new DateTime Utils class
             //currentTime = new Date();
-            Log.i("TAG", "Calculating time" + DateTimeUtils.getCurrentTime());
+            Log.i("TAG", "Calculating time" +" "+DateTimeUtils.currentDateAndTime+" "+ DateTimeUtils.getCurrentTime());
 
 
-            long lastTimeTRM = resultDao.getMaxTimeStamp(TYPE1);
+            /*long lastTimeTRM = resultDao.getMaxTimeStamp(TYPE1);
             long lastTimePM = resultDao.getMaxTimeStamp(TYPE2);
             long lastTimeUM = resultDao.getMaxTimeStamp(TYPE3);
 
@@ -254,17 +254,17 @@ public class LayoutActivity extends AppCompatActivity implements NavigationView.
             float hrsPM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimePM, currentTime)) / TO_HRS;
             float hrsUM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimeUM, currentTime)) / TO_HRS;
 
-            Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
+            Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);*/
 
-            if (hrsTRM >= 4.0) {
+            if (PreferenceUtils.shouldRefresh(TYPE1)) {
                 callApi(TYPE1,api, new BlockExecutor() {
                     @Override
                     public void executeThis() {
-                        if (hrsUM >= 4.0) {
+                        if (PreferenceUtils.shouldRefresh(TYPE3)) {
                             callApi(TYPE3,api, new BlockExecutor() {
                                 @Override
                                 public void executeThis() {
-                                    if (hrsPM >= 4.0) {
+                                    if (PreferenceUtils.shouldRefresh(TYPE2)) {
                                         callApi(TYPE2,api, new BlockExecutor() {
                                             @Override
                                             public void executeThis() {

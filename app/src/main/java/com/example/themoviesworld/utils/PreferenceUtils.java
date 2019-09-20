@@ -30,30 +30,36 @@ public class PreferenceUtils {
     }
     public static boolean shouldRefresh(String TYPE){
         ResultDao resultDao= MovieApp.getUserDatabase().getResultDao();
-        long lastTimeTRM = resultDao.getMaxTimeStamp(TYPE1);
-        long lastTimePM = resultDao.getMaxTimeStamp(TYPE2);
-        long lastTimeUM = resultDao.getMaxTimeStamp(TYPE3);
 
-        Log.i("TAG", "Time TRM : " + lastTimeTRM + "-" + DateTimeUtils.getCurrentTime());
+        long lastTime = resultDao.getMaxTimeStamp(TYPE);
+
+
+        //Log.i("TAG", "Time TRM : " + lastTimeTRM + "-" + DateTimeUtils.getCurrentTime());
 
         long currentTime = DateTimeUtils.getCurrentTime();
 
-        float hrsTRM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimeTRM, currentTime)) / TO_HRS;
-        float hrsPM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimePM, currentTime)) / TO_HRS;
-        float hrsUM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimeUM, currentTime)) / TO_HRS;
 
-        Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
-        switch (TYPE){
-            case TYPE1:
-                return hrsTRM>=4;
-
-            case TYPE2:
-                return hrsPM>=4;
-
-            case TYPE3:
-                return hrsUM>=4;
-        }
-
-        return false;
+        float hrs = (DateTimeUtils.getTimeDifferenceinSeconds(lastTime, currentTime)) / TO_HRS;
+        Log.i("TAG", "shouldRefresh: "+hrs+" "+currentTime+" "+lastTime);
+        return hrs>=4;
     }
 }
+
+
+
+
+        /*Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
+        switch (TYPE){
+            case TYPE1:
+                return hrs>=4;
+                break;
+
+            case TYPE2:
+                return hrs>=4;
+                break;
+
+            case TYPE3:
+                return hrs>=4;
+                break;
+        }*/
+
