@@ -88,85 +88,9 @@ public class LayoutActivity extends AppCompatActivity implements NavigationView.
                 default:
                     iCallback=null;
         }
-        implementApiResponse(TYPE,iCallback,iBlockExecutor);
-    }
-   /* private void callApiTopRated(Api api, BlockExecutor iBlockExecutor) {
-        Log.i("TAG", "Inside callAPITopRated");
-
-        Call iCallback = api.getTopRatedMovies();
-        implementApiResponse(TYPE1, iCallback, iBlockExecutor);
+        ApiCallsUtils.implementApiResponse(TYPE,iCallback,iBlockExecutor,resultDao);
     }
 
-
-    private void callApiPopularMovies(Api api, BlockExecutor iBlockExecutor) {
-        Log.i("TAG", "Inside callAPIPopularMovies");
-        Log.i("TAG", "onCreate: Popular movies");
-
-
-        Call iCallback = api.getPopularMovies();
-        implementApiResponse(TYPE2, iCallback, iBlockExecutor);
-    }
-
-    public void callApiUpcoming(Api api, BlockExecutor iBlockExecutor) {
-        Log.i("TAG", "Inside callAPIUpcoming");
-
-
-        Log.i("TAG", "In callApiUpcoming calling api");
-        Call iCallback = api.getUpcomingMovies();
-        implementApiResponse(TYPE3, iCallback, iBlockExecutor);
-    }
-*/
-
-    public Api createApiRequest() {
-        Log.i("TAG", "Inside create Api Request function");
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(new OkHttpClient.Builder()
-                        .addInterceptor(logging).build())
-                .baseUrl(Api.baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Api api = retrofit.create(Api.class);
-        return api;
-    }
-
-    private void implementApiResponse(String TYPE, Call iCallback, BlockExecutor iBlockExecutor) {
-
-        iCallback.enqueue(new Callback<Example>() {
-            @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
-                Example example = response.body();
-                List<Result> results = example.getResults();
-                Log.i("TAG", "onResponse: " + example.getTotalResults() + example + " " + results.size());
-
-                resultDao.deleteByType(TYPE);
-
-                Log.i("TAG", "onCreate: Inserting TopRateddata in database QUERY");
-
-                for (Result i : results) {
-                    i.setType(TYPE);
-                    i.setLastTimeStamp(DateTimeUtils.getCurrentTime());
-                    i.setPosterPath(imageUrl + i.getPosterPath());
-                    resultDao.insert(i);
-
-                }
-
-                if (iBlockExecutor != null)
-                    iBlockExecutor.executeThis();
-
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                Log.i("TAG", "onFailure: " + t.getMessage());
-
-            }
-        });
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +130,7 @@ public class LayoutActivity extends AppCompatActivity implements NavigationView.
 
         List<Result> resultList = resultDao.getResult();
 
-        Api api = createApiRequest();
+        Api api = ApiCallsUtils.createApiRequest();
 
         Log.i("TAG", "Check Database Empty" + resultList);
 

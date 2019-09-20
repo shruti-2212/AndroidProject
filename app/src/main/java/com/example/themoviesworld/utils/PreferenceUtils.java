@@ -23,13 +23,13 @@ public class PreferenceUtils {
         return editor.commit();
     }
 
-    public static int getId()
-     {
+    public static int getId() {
         SharedPreferences sharedPreferences = MovieApp.getContext().getSharedPreferences(DBConstants.PREF_STRING, 0);
         return sharedPreferences.getInt("ID", 0);
     }
-    public static boolean shouldRefresh(String TYPE){
-        ResultDao resultDao= MovieApp.getUserDatabase().getResultDao();
+
+    public static boolean shouldRefresh(String TYPE) {
+        ResultDao resultDao = MovieApp.getUserDatabase().getResultDao();
 
         long lastTime = resultDao.getMaxTimeStamp(TYPE);
 
@@ -40,26 +40,11 @@ public class PreferenceUtils {
 
 
         float hrs = (DateTimeUtils.getTimeDifferenceinSeconds(lastTime, currentTime)) / TO_HRS;
-        Log.i("TAG", "shouldRefresh: "+hrs+" "+currentTime+" "+lastTime);
-        return hrs>=4;
+        Log.i("TAG", "shouldRefresh: " + hrs + " " + currentTime + " " + lastTime);
+        return hrs >= 4;
     }
 }
 
 
 
-
-        /*Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);
-        switch (TYPE){
-            case TYPE1:
-                return hrs>=4;
-                break;
-
-            case TYPE2:
-                return hrs>=4;
-                break;
-
-            case TYPE3:
-                return hrs>=4;
-                break;
-        }*/
 
