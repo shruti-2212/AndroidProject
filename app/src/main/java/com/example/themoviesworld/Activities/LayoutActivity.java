@@ -21,6 +21,7 @@ import com.example.themoviesworld.Adapters.PageAdapter;
 import com.example.themoviesworld.Api.Api;
 import com.example.themoviesworld.BlockExecutor;
 import com.example.themoviesworld.DBConstants;
+import com.example.themoviesworld.DBUtils;
 import com.example.themoviesworld.Fragments.LatestMovies;
 import com.example.themoviesworld.Fragments.PopularMovies;
 import com.example.themoviesworld.Fragments.TopRatedMovies;
@@ -72,25 +73,6 @@ public class LayoutActivity extends AppCompatActivity implements NavigationView.
 
     private ResultDao resultDao;
 
-    private void callApi(String TYPE,Api api,BlockExecutor iBlockExecutor){
-        Call iCallback;
-        switch (TYPE){
-            case TYPE1:
-                iCallback=api.getTopRatedMovies();
-                break;
-            case TYPE2:
-                iCallback=api.getPopularMovies();
-                break;
-            case TYPE3:
-                iCallback=api.getUpcomingMovies();
-                break;
-
-                default:
-                    iCallback=null;
-        }
-        ApiCallsUtils.implementApiResponse(TYPE,iCallback,iBlockExecutor,resultDao);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,13 +123,13 @@ public class LayoutActivity extends AppCompatActivity implements NavigationView.
             Log.i("TAG", "On Database Empty");
 
             // FIXME Start using some architectural pattern to model such implementation in a modular and flexible
-            callApi(TYPE3,api, new BlockExecutor() {
+            callApi(TYPE3, api, new BlockExecutor() {
                 @Override
                 public void executeThis() {
-                    callApi(TYPE1,api, new BlockExecutor() {
+                    callApi(TYPE1, api, new BlockExecutor() {
                         @Override
                         public void executeThis() {
-                          callApi(TYPE2,api, new BlockExecutor() {
+                            callApi(TYPE2, api, new BlockExecutor() {
                                 @Override
                                 public void executeThis() {
                                     updateUI();
@@ -162,34 +144,22 @@ public class LayoutActivity extends AppCompatActivity implements NavigationView.
 
 
             // FIXME Move this code to a new DateTime Utils class
-            //currentTime = new Date();
-            Log.i("TAG", "Calculating time" +" "+DateTimeUtils.currentDateAndTime+" "+ DateTimeUtils.getCurrentTime());
+
+            Log.i("TAG", "Calculating time" + " " + DateTimeUtils.currentDateAndTime + " " + DateTimeUtils.getCurrentTime());
 
 
-            /*long lastTimeTRM = resultDao.getMaxTimeStamp(TYPE1);
-            long lastTimePM = resultDao.getMaxTimeStamp(TYPE2);
-            long lastTimeUM = resultDao.getMaxTimeStamp(TYPE3);
 
-            Log.i("TAG", "Time TRM : " + lastTimeTRM + "-" + DateTimeUtils.getCurrentTime());
 
-            long currentTime = DateTimeUtils.getCurrentTime();
-
-            float hrsTRM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimeTRM, currentTime)) / TO_HRS;
-            float hrsPM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimePM, currentTime)) / TO_HRS;
-            float hrsUM = (DateTimeUtils.getTimeDifferenceinSeconds(lastTimeUM, currentTime)) / TO_HRS;
-
-            Log.i("TAG", "onCreate: " + " " + hrsTRM + " " + hrsPM + " " + hrsUM);*/
-
-            if (PreferenceUtils.shouldRefresh(TYPE1)) {
-                callApi(TYPE1,api, new BlockExecutor() {
+            if (DBUtils.shouldRefresh(TYPE1)) {
+                callApi(TYPE1, api, new BlockExecutor() {
                     @Override
                     public void executeThis() {
-                        if (PreferenceUtils.shouldRefresh(TYPE3)) {
-                            callApi(TYPE3,api, new BlockExecutor() {
+                        if (DBUtils.shouldRefresh(TYPE3)) {
+                            callApi(TYPE3, api, new BlockExecutor() {
                                 @Override
                                 public void executeThis() {
-                                    if (PreferenceUtils.shouldRefresh(TYPE2)) {
-                                        callApi(TYPE2,api, new BlockExecutor() {
+                                    if (DBUtils.shouldRefresh(TYPE2)) {
+                                        callApi(TYPE2, api, new BlockExecutor() {
                                             @Override
                                             public void executeThis() {
                                                 // Update UI if required
@@ -207,6 +177,26 @@ public class LayoutActivity extends AppCompatActivity implements NavigationView.
         }
 
     }
+
+    private void callApi(String TYPE, Api api, BlockExecutor iBlockExecutor) {
+        Call iCallback;
+        switch (TYPE) {
+            case TYPE1:
+                iCallback = api.getTopRatedMovies();
+                break;
+            case TYPE2:
+                iCallback = api.getPopularMovies();
+                break;
+            case TYPE3:
+                iCallback = api.getUpcomingMovies();
+                break;
+
+            default:
+                iCallback = null;
+        }
+        ApiCallsUtils.implementApiResponse(TYPE, iCallback, iBlockExecutor, resultDao);
+    }
+
 
     private void updateUI() {
 

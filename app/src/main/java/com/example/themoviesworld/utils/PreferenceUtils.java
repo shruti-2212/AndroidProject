@@ -10,9 +10,6 @@ import com.example.themoviesworld.dao.ResultDao;
 
 
 import static com.example.themoviesworld.DBConstants.TO_HRS;
-import static com.example.themoviesworld.DBConstants.TYPE1;
-import static com.example.themoviesworld.DBConstants.TYPE2;
-import static com.example.themoviesworld.DBConstants.TYPE3;
 
 public class PreferenceUtils {
 
@@ -28,21 +25,6 @@ public class PreferenceUtils {
         return sharedPreferences.getInt("ID", 0);
     }
 
-    public static boolean shouldRefresh(String TYPE) {
-        ResultDao resultDao = MovieApp.getUserDatabase().getResultDao();
-
-        long lastTime = resultDao.getMaxTimeStamp(TYPE);
-
-
-        //Log.i("TAG", "Time TRM : " + lastTimeTRM + "-" + DateTimeUtils.getCurrentTime());
-
-        long currentTime = DateTimeUtils.getCurrentTime();
-
-
-        float hrs = (DateTimeUtils.getTimeDifferenceinSeconds(lastTime, currentTime)) / TO_HRS;
-        Log.i("TAG", "shouldRefresh: " + hrs + " " + currentTime + " " + lastTime);
-        return hrs >= 4;
-    }
 }
 
 
