@@ -1,7 +1,9 @@
-package com.example.themoviesworld;
+package com.example.themoviesworld.utils;
 
 import android.util.Log;
 
+import com.example.themoviesworld.DBConstants;
+import com.example.themoviesworld.MovieApp;
 import com.example.themoviesworld.dao.ResultDao;
 import com.example.themoviesworld.utils.DateTimeUtils;
 

@@ -1,7 +1,6 @@
 package com.example.themoviesworld.Activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -21,11 +20,7 @@ import com.example.themoviesworld.Adapters.PageAdapter;
 import com.example.themoviesworld.Api.Api;
 import com.example.themoviesworld.BlockExecutor;
 import com.example.themoviesworld.DBConstants;
-import com.example.themoviesworld.DBUtils;
-import com.example.themoviesworld.Fragments.LatestMovies;
-import com.example.themoviesworld.Fragments.PopularMovies;
-import com.example.themoviesworld.Fragments.TopRatedMovies;
-import com.example.themoviesworld.Models.Example;
+import com.example.themoviesworld.utils.DBUtils;
 import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.MovieApp;
 import com.example.themoviesworld.utils.ActivityUtils;
@@ -38,18 +33,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.lang.Math.abs;
 
