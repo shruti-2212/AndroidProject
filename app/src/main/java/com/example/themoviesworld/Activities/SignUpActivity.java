@@ -17,12 +17,18 @@ import com.example.themoviesworld.Models.User;
 import com.example.themoviesworld.MovieApp;
 import com.example.themoviesworld.R;
 import com.example.themoviesworld.dao.UserDao;
+import com.example.themoviesworld.utils.ActivityUtils;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText firstName, LastName, Email, password, confirmPassword;
-    Button signup;
-    //    private UserDatabase userDatabase;
+    private EditText firstName;
+    private EditText LastName;
+    private EditText Email;
+    private EditText password;
+    private EditText confirmPassword;
+
+    private  Button signup;
+
     private UserDao userDao;
     private ProgressDialog progressDialog;
 
@@ -69,10 +75,9 @@ public class SignUpActivity extends AppCompatActivity {
                                     Email.getText().toString(), password.getText().toString());
                             userDao.insert(user);
                             progressDialog.dismiss();
-                            Intent i = new Intent(SignUpActivity.this, MainActivity.class);
+                            Intent i = new Intent();
                             i.putExtra("From_Signup", true);
-                            startActivity(i);
-                            finish();
+                            ActivityUtils.launchActivityWithData(i,SignUpActivity.this, MainActivity.class);
                         }
                     }, 1000);
 
@@ -83,15 +88,11 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean isEmpty() {
-        if (TextUtils.isEmpty(Email.getText().toString()) ||
+       return (TextUtils.isEmpty(Email.getText().toString()) ||
                 TextUtils.isEmpty(password.getText().toString()) ||
                 TextUtils.isEmpty(firstName.getText().toString()) ||
-                TextUtils.isEmpty(LastName.getText().toString())
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+                TextUtils.isEmpty(LastName.getText().toString()));
+
     }
 
 }

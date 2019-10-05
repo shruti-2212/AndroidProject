@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.themoviesworld.Adapters.RecyclerAdapter;
 import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.MovieApp;
+import com.example.themoviesworld.R;
 import com.example.themoviesworld.dao.ResultDao;
 
 import java.util.List;
@@ -25,11 +26,7 @@ public abstract class BaseMovieFragment extends BaseFragment {
     private RecyclerAdapter recyclerAdapter = null;
     private RecyclerView recyclerView = null;
 
-    protected abstract int getLayoutId();
-
     protected abstract String getType();
-
-    protected abstract int getRecyclerViewId();
 
     @Override
     public void onAttach(Context context) {
@@ -58,14 +55,14 @@ public abstract class BaseMovieFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutId(), container, false);
+        return inflater.inflate(R.layout.fragment_movies, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(getRecyclerViewId());
+        recyclerView = view.findViewById(R.id.recyclerView_movies);
 
         if (recyclerAdapter == null)
             recyclerAdapter = new RecyclerAdapter(getActivity());

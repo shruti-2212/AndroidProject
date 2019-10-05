@@ -1,5 +1,7 @@
 package com.example.themoviesworld.Activities;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,40 +14,39 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.themoviesworld.Models.User;
 import com.example.themoviesworld.MovieApp;
-import com.example.themoviesworld.PreferenceUtils;
-import com.example.themoviesworld.R;
+import com.example.themoviesworld.utils.PreferenceUtils;
 import com.example.themoviesworld.dao.UserDao;
+import com.example.themoviesworld.R;
+import com.example.themoviesworld.Models.User;
 import com.example.themoviesworld.utils.ActivityUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.example.themoviesworld.utils.DateTimeUtils;
+import com.example.themoviesworld.utils.ToastUtils;
 
 import static com.example.themoviesworld.DBConstants.TO_HRS;
 import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity {
+
     private EditText userEmail;
     private EditText password;
     private RelativeLayout rr1;
     private RelativeLayout rr2;
     private RelativeLayout rr3;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+    private Button button_login;
+    private Button button_sign_up;
+    private Button button_forgot_password;
 
     private UserDao userDao;
     private ProgressDialog progressDialog;
-    private float loginTimeDiff, loginTimeDiffInHrs;
 
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
+
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
         @Override
         public void run() {
             Log.i("TAG", "run: Current Thread" + Thread.currentThread());
-            // TODO 3 views are okay. for more similar views create arrays of views and then check visibility
             rr1.setVisibility(View.VISIBLE);
             rr2.setVisibility(View.VISIBLE);
             rr3.setVisibility(View.VISIBLE);
@@ -54,47 +55,47 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        userDao = MovieApp.getUserDatabase().getUserDao();
 
-        // Check if there are any existing users logged in within the defined time limit
-        if (userDao.getUserCount() != 0 && PreferenceUtils.getId() != 0) {
-            int id = PreferenceUtils.getId();
+        super.onCreate(savedInstanceState);
+
+        userDao = MovieApp.getUserDatabase().getUserDao();
+        int id = PreferenceUtils.getId();
+
+        //Initially check whether user database is empty or has logged in previously
+        if (userDao.getUserCount() != 0 && id != 0) {
+
             Log.i("Tag", "USer Id is" + id);
 
-            String lastLoginTime = userDao.getUser(id).getUserLoginTime();
+            String lastLoginTimeString = userDao.getUser(id).getUserLoginTime();
+            long lastLoginTime = DateTimeUtils.parseStringToDate(lastLoginTimeString).getTime();
+            long currentTime = DateTimeUtils.getCurrentTime();
 
-            // TODO Create a DateTimeUtils class that does all the operations related to date and time usage
-            Date currentTime = new Date();
 
-            try {
-                loginTimeDiff = (abs((dateFormat.parse(lastLoginTime)).getTime() - currentTime.getTime()));
-                loginTimeDiffInHrs = loginTimeDiff / TO_HRS;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            long loginTimeDiff = DateTimeUtils.getTimeDifferenceinSeconds(lastLoginTime, currentTime);
+            float loginTimeDiffInHrs = loginTimeDiff / TO_HRS;
 
             Log.i("Tag", "LastLogin Time: " + lastLoginTime);
-            Log.i("Tag", "Current Time:" + currentTime);
             Log.i("Tag", "Login time diff:" + loginTimeDiff);
             Log.i("Tag", "Login time diff in hrs:" + loginTimeDiffInHrs);
 
+            // Check if there are any existing users logged in within the defined time limit
             if (loginTimeDiffInHrs < 24.0) {
 
+                ToastUtils.showToast("Logged in UserFound");
                 Intent i = new Intent(this, LayoutActivity.class);
                 i.putExtra("User Name", userDao.getUser(id).getFirst_name());
                 startActivity(i);
                 finish();
             } else {
-                // TODO Add some logs, Toast or anything that explains this flow
+                ToastUtils.showToast("User Login time expired.Needs to be logged in again");
             }
         } else {
-            // TODO Add some logs, Toast or anything that explains this flow
-            Log.d("TAG", "No logged in user found");
+            ToastUtils.showToast("No Logged in User found");
         }
 
 
         setContentView(R.layout.activity_main);
+
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -113,51 +114,49 @@ public class MainActivity extends AppCompatActivity {
         Log.i("TAG", "onCreate: Current Thread" + Thread.currentThread());
         handler.postDelayed(runnable, 2000);
 
-        Button button_login = findViewById(R.id.login_button);
-        Button button_sign_up = findViewById(R.id.btn_signup);
-        Button button_forgot_password = findViewById(R.id.btn_forgot_password);
+        button_login = findViewById(R.id.login_button);
+        button_sign_up = findViewById(R.id.btn_signup);
+        button_forgot_password = findViewById(R.id.btn_forgot_password);
 
         button_sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                startActivity(intent);
-                finish();
+                ActivityUtils.launchActivityAndFinish(MainActivity.this, SignUpActivity.class);
             }
         });
+
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final User user = userDao.getuser(userEmail.getText().toString(), password.getText().toString());
 
-                // Validates the entered user details
+                final User user = userDao.getuser(userEmail.getText().toString(), password.getText().toString());
                 if (emptyValidation()) {
                     Toast.makeText(MainActivity.this, "UserName and password fields cannot be empty", Toast.LENGTH_LONG).show();
                 } else {
                     progressDialog.show();
-
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             if (user != null) {
-                                user.setUserLoginTime(dateFormat.format(new Date()));
+
+                                user.setUserLoginTime(DateTimeUtils.parseDateToString(DateTimeUtils.currentDateAndTime));
                                 userDao.update(user);
 
                                 Log.i("Tag", "Setting user login time" + user.getUserLoginTime());
 
                                 PreferenceUtils.saveId(user.getId());
-
-                                Intent i = new Intent(MainActivity.this, LayoutActivity.class);
+                                Intent i = new Intent();
                                 i.putExtra("User Name", user.getFirst_name());
                                 i.putExtra("ID", user.getId());
-                                startActivity(i);
-                                finish();
+                                ActivityUtils.launchActivityWithData(i,MainActivity.this, LayoutActivity.class);
                             } else {
-                                Toast.makeText(MainActivity.this, "User not registered", Toast.LENGTH_LONG).show();
+                                ToastUtils.showToast("User not registered");
+
                             }
                             progressDialog.dismiss();
                         }
                     }, 1000);
+
                 }
 
             }
@@ -166,17 +165,14 @@ public class MainActivity extends AppCompatActivity {
         button_forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // FIXME Repeated code. Should go in a method
                 ActivityUtils.launchActivityAndFinish(MainActivity.this, ChangePasswordActivity.class);
             }
         });
 
+
     }
 
     private boolean emptyValidation() {
-        // FIXME Simplify the code wherever required
         return TextUtils.isEmpty(userEmail.getText().toString()) || TextUtils.isEmpty(password.getText().toString());
     }
-
-
 }

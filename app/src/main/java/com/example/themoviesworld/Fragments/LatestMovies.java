@@ -13,13 +13,4 @@ public class LatestMovies extends BaseMovieFragment {
         return TYPE3;
     }
 
-    @Override
-    protected int getRecyclerViewId() {
-        return R.id.recyclerView_movies;
-    }
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.fragment_movies;
-    }
 }

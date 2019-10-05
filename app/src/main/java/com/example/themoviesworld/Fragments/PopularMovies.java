@@ -13,14 +13,4 @@ public class PopularMovies extends BaseMovieFragment {
         return TYPE2;
     }
 
-    @Override
-    protected int getRecyclerViewId() {
-        return R.id.recyclerView_movies;
-    }
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.fragment_movies;
-    }
-
 }

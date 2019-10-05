@@ -17,4 +17,5 @@ public class ToastUtils {
 
     // TODO Add method if custom toast is required
 
+
 }
