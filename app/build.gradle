@@ -20,7 +20,7 @@ android {
     /*buildTypes{
         it.buildConfigField 'String' ,'The_Movie_db_API_KEY', MyMovieDBAPI_key
     }*/
-    compileOptions()
+    compileOptions
             {
                 sourceCompatibility JavaVersion.VERSION_1_8
                 targetCompatibility JavaVersion.VERSION_1_8

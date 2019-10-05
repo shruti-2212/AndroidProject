@@ -15,6 +15,4 @@ public abstract class UserDatabase extends RoomDatabase {
 
     public abstract ResultDao getResultDao();
 
-    //public abstract ExampleDao getExampleDao();
-
 }

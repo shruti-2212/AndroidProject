@@ -29,21 +29,4 @@ public interface Api {
     @GET("3/genre/movie/list")
     Call<Example> getGenres();
 }
-//    @GET("/3/movie/popular")
-//    fun getPopularMovies(@Query("api_key") apiKey: String,
-//                         @Query("page") page: Int): Call<GetMoviesResponse>
-//
-//@GET("/3/movie/top_rated")
-//   fun getTopRatedMovies(@Query("api_key") apiKey: String,
-//@Query("page") page: Int): Call<GetMoviesResponse>
-//
-//@GET("/3/movie/upcoming")
-//   fun getUpcomingMovies(@Query("api_key") apiKey: String,
-//@Query("page") page: Int): Call<GetMoviesResponse>
-//
-//@GET("/3/movie/{movieId}")
-//   fun getMovieDetails(@Path("movieId") movieId: Long,
-//@Query("api_key") apiKey: String): Call<MovieDetails>
-//
-//@GET("3/genre/movie/list")
-//   fun getGenres(@Query("api_key") apiKey: String): Call<GetGenresResponse>
+

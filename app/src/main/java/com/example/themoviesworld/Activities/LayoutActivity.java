@@ -29,6 +29,7 @@ import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.MovieApp;
 import com.example.themoviesworld.PreferenceUtils;
 import com.example.themoviesworld.R;
+import com.example.themoviesworld.base.OnFragmentInteractionListener;
 import com.example.themoviesworld.dao.ResultDao;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabItem;
@@ -49,8 +50,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.lang.Math.abs;
 
-public class LayoutActivity extends AppCompatActivity implements PopularMovies.OnFragmentInteractionListener, LatestMovies.OnFragmentInteractionListener,
-        TopRatedMovies.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener, DBConstants {
+public class LayoutActivity extends AppCompatActivity implements OnFragmentInteractionListener,
+//        PopularMovies.OnFragmentInteractionListener, LatestMovies.OnFragmentInteractionListener, TopRatedMovies.OnFragmentInteractionListener,
+        NavigationView.OnNavigationItemSelectedListener, DBConstants {
 
     Toolbar toolbar;
     ViewPager viewPager;

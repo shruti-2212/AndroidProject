@@ -20,17 +20,22 @@ import com.example.themoviesworld.Activities.MovieDetailActivity;
 import com.example.themoviesworld.Models.Result;
 import com.example.themoviesworld.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
     private Context mContext;
-    private List<Result> mdata;
-    RequestOptions options;
+    private RequestOptions options;
+    private List<Result> mdata = new ArrayList<>();
 
-    public RecyclerAdapter(Context mContext, List<Result> mdata) {
+
+    public RecyclerAdapter(Context mContext) {
         this.mContext = mContext;
-        this.mdata = mdata;
         options = new RequestOptions().centerCrop().override(100, 150).placeholder(R.drawable.drawable_loading_shape).error(R.drawable.drawable_loading_shape);
+    }
+
+    public void setMdata(List<Result> mdata) {
+        this.mdata = mdata;
     }
 
     @NonNull
