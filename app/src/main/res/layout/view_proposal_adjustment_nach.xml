@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <CheckBox
-        android:id="@+id/service_checkbox"
+        android:id="@+id/service_name_cb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -25,34 +25,34 @@
         android:paddingStart="4dp"
         android:text="NACH (Adjusted)"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/service_checkbox" />
+        app:layout_constraintTop_toBottomOf="@id/service_name_cb" />
 
     <RadioGroup
-        android:id="@+id/radio_group"
+        android:id="@+id/nach_adjustment_rg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         android:padding="5dp"
         app:layout_constraintStart_toEndOf="@id/nach_details_txv"
-        app:layout_constraintTop_toBottomOf="@id/service_checkbox"
+        app:layout_constraintTop_toBottomOf="@id/service_name_cb"
         app:layout_constraintTop_toTopOf="@id/nach_details_txv">
 
         <RadioButton
-            android:id="@+id/maxi_days_radio_0"
+            android:id="@+id/adjustment_type_0_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="0" />
 
         <RadioButton
-            android:id="@+id/maxi_days_radio_1"
+            android:id="@+id/adjustment_type_1_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1" />
 
         <RadioButton
-            android:id="@+id/maxi_days_radio_2"
+            android:id="@+id/adjustment_type_2_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2" />
@@ -60,7 +60,7 @@
     </RadioGroup>
 
     <CheckBox
-        android:id="@+id/service_checkbox_1"
+        android:id="@+id/set_up_fee_cb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -68,6 +68,5 @@
         android:text="Set-Up Fee"
         app:layout_constraintStart_toStartOf="@id/nach_details_txv"
         app:layout_constraintTop_toBottomOf="@id/nach_details_txv" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

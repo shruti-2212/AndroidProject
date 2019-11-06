@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/adjustment_types_rg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/no_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="No" />
+
+        <RadioButton
+            android:id="@+id/nach_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NACH" />
+
+        <RadioButton
+            android:id="@+id/non_nach_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Non-NACH" />
+
+    </RadioGroup>
+
+    <!--RecyclerView containing services-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/common_adjustment_rv"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:visibility="gone"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>
