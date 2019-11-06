@@ -18,7 +18,7 @@ import java.util.List;
 public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDemoAdapter.MyViewHolder> {
 
     private List<ServiceTypePojo> serviceTypePojoList;
-    Context mContext;
+    private Context mContext;
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public CheckBox serviceTypeCheckbox;
@@ -59,7 +59,7 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
     @Override
     public RecyclerViewDemoAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_view_demo, parent, false);
+                .inflate(R.layout.view_proposal_adjustment_non_nach, parent, false);
         return new RecyclerViewDemoAdapter.MyViewHolder(v);
     }
 }

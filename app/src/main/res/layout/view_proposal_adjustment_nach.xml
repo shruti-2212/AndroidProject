@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBox
+        android:id="@+id/service_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="MDC"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/nach_details_txv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:gravity="center_vertical"
+        android:minLines="2"
+        android:paddingStart="4dp"
+        android:text="NACH (Adjusted)"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/service_checkbox" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        app:layout_constraintStart_toEndOf="@id/nach_details_txv"
+        app:layout_constraintTop_toBottomOf="@id/service_checkbox"
+        app:layout_constraintTop_toTopOf="@id/nach_details_txv">
+
+        <RadioButton
+            android:id="@+id/maxi_days_radio_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="0" />
+
+        <RadioButton
+            android:id="@+id/maxi_days_radio_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <RadioButton
+            android:id="@+id/maxi_days_radio_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2" />
+
+    </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/service_checkbox_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="Set-Up Fee"
+        app:layout_constraintStart_toStartOf="@id/nach_details_txv"
+        app:layout_constraintTop_toBottomOf="@id/nach_details_txv" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
