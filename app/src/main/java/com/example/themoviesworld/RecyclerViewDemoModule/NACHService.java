@@ -40,6 +40,11 @@ public class NACHService implements IAdjustment {
         return checked;
     }
 
+    @Override
+    public int getAdjustmentType() {
+        return 1;
+    }
+
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
@@ -79,6 +84,9 @@ public class NACHService implements IAdjustment {
     public AdjustmentType getNachAdjustmentTypeTwo() {
         return nachAdjustmentTypeTwo;
     }
+
+
+
 
     public void setNachAdjustmentTypeTwo(AdjustmentType nachAdjustmentTypeTwo) {
         this.nachAdjustmentTypeTwo = nachAdjustmentTypeTwo;

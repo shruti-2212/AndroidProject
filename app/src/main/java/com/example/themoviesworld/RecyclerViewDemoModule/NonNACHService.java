@@ -34,6 +34,11 @@ public class NonNACHService implements IAdjustment {
         return checked;
     }
 
+    @Override
+    public int getAdjustmentType() {
+        return 2;
+    }
+
     public AdjustmentType getPeriodAdjustmentType() {
         return periodAdjustmentType;
     }

@@ -1,6 +1,7 @@
 package com.example.themoviesworld.RecyclerViewDemoModule;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,17 +27,19 @@ import butterknife.ButterKnife;
  */
 public class AdjustmentAdapter extends RecyclerView.Adapter<AdjustmentAdapter.BaseAdjustmentViewHolder> {
 
-    private List<? extends IAdjustment> mNonNACHServiceList = new ArrayList<>();
-    private int mItemLayoutId;
-    private LayoutInflater mLayoutInflater;
+    private List<? extends IAdjustment> mAdjustmentServiceList = new ArrayList<>();
+    Context mContext;
+//    private int mItemLayoutId;
+    //private LayoutInflater mLayoutInflater;
 
-    public AdjustmentAdapter(Context context, int iLayoutId) {
-        this.mItemLayoutId = iLayoutId;
-        this.mLayoutInflater = LayoutInflater.from(context);
+    public AdjustmentAdapter(Context context)/*, int adjustmentType)*/ {
+        mContext = context;
+//        this.mItemLayoutId = iLayoutId;
+       // this.mLayoutInflater = LayoutInflater.from(context);
     }
 
-    public void setNonNACHServiceList(List<? extends IAdjustment> nonNACHServiceList) {
-        this.mNonNACHServiceList = nonNACHServiceList;
+    public void setAdjustmentServiceList(List<? extends IAdjustment> adjustmentServiceList) {
+        this.mAdjustmentServiceList = adjustmentServiceList;
         notifyDataSetChanged();
     }
 
@@ -60,10 +63,10 @@ public class AdjustmentAdapter extends RecyclerView.Adapter<AdjustmentAdapter.Ba
     public void onBindViewHolder(AdjustmentAdapter.BaseAdjustmentViewHolder holder, int position) {
         // Instead of mLayoutId, you can also define based on viewType for separation.
 
-        switch (mItemLayoutId) {
-            case R.layout.view_proposal_adjustment_non_nach:
+        switch (getItemViewType(position)) {
+            case 2:
                 NonNACHAdjustmentViewHolder nonNACHAdjVH = (NonNACHAdjustmentViewHolder) holder;
-                NonNACHService nonNACHService = (NonNACHService) mNonNACHServiceList.get(position);
+                NonNACHService nonNACHService = (NonNACHService) mAdjustmentServiceList.get(position);
 
                 nonNACHAdjVH.serviceNameCB.setText(nonNACHService.getServiceName());
                 nonNACHAdjVH.periodAdjustmentRB.setText(nonNACHService.getPeriodAdjustmentType().toString());
@@ -93,21 +96,24 @@ public class AdjustmentAdapter extends RecyclerView.Adapter<AdjustmentAdapter.Ba
                 });
 
                 break;
-            case R.layout.view_proposal_adjustment_nach:
+            case 1:
                 NACHAdjustmentViewHolder nachAdjVH = (NACHAdjustmentViewHolder) holder;
-                NACHService nachService = (NACHService) mNonNACHServiceList.get(position);
+                NACHService nachService = (NACHService) mAdjustmentServiceList.get(position);
 
                 nachAdjVH.serviceNameCB.setText(nachService.getServiceName());
                 nachAdjVH.serviceNameCB.setChecked(nachService.isChecked());
 
                 nachAdjVH.adjustmentTypeZeroRB.setText(nachService.getNachAdjustmentTypeZero().toString());
                 nachAdjVH.adjustmentTypeZeroRB.setChecked(nachService.getNachAdjustmentTypeZero().isChecked());
+                Log.i("tag","checked0"+nachService.getNachAdjustmentTypeZero().isChecked());
 
                 nachAdjVH.adjustmentTypeOneRB.setText(nachService.getNachAdjustmentTypeOne().toString());
                 nachAdjVH.adjustmentTypeOneRB.setChecked(nachService.getNachAdjustmentTypeOne().isChecked());
+                Log.i("tag","checked1"+nachService.getNachAdjustmentTypeZero().isChecked());
 
                 nachAdjVH.adjustmentTypeTwoRB.setText(nachService.getNachAdjustmentTypeTwo().toString());
                 nachAdjVH.adjustmentTypeTwoRB.setChecked(nachService.getNachAdjustmentTypeTwo().isChecked());
+                Log.i("tag","checked2"+nachService.getNachAdjustmentTypeZero().isChecked());
 
                 nachAdjVH.setUpFeeCB.setChecked(nachService.hasSetUpFee());
 
@@ -132,6 +138,7 @@ public class AdjustmentAdapter extends RecyclerView.Adapter<AdjustmentAdapter.Ba
                         switch (checkedId) {
                             case R.id.adjustment_type_0_rb:
                                 nachService.getNachAdjustmentTypeZero().setChecked(true);
+                                Log.i("tag","checked0"+nachService.getNachAdjustmentTypeZero().isChecked());
                                 nachService.getNachAdjustmentTypeOne().setChecked(false);
                                 nachService.getNachAdjustmentTypeTwo().setChecked(false);
                                 break;
@@ -139,6 +146,7 @@ public class AdjustmentAdapter extends RecyclerView.Adapter<AdjustmentAdapter.Ba
                                 nachService.getNachAdjustmentTypeZero().setChecked(false);
                                 nachService.getNachAdjustmentTypeOne().setChecked(true);
                                 nachService.getNachAdjustmentTypeTwo().setChecked(false);
+                                Log.i("tag","checked1"+nachService.getNachAdjustmentTypeZero().isChecked());
                                 break;
                             case R.id.adjustment_type_2_rb:
                                 nachService.getNachAdjustmentTypeZero().setChecked(false);
@@ -162,13 +170,24 @@ public class AdjustmentAdapter extends RecyclerView.Adapter<AdjustmentAdapter.Ba
 
     @Override
     public int getItemCount() {
-        return mNonNACHServiceList.size();
+        return mAdjustmentServiceList.size();
     }
 
     @Override
     public AdjustmentAdapter.BaseAdjustmentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
-        return getViewHolder(view);//new AdjustmentAdapter.MyViewHolder(v);
+        int layoutId;
+        switch (viewType){
+            case 1:
+                layoutId = R.layout.view_proposal_adjustment_nach;
+                break;
+            case 2:
+                default:
+                    layoutId=R.layout.view_proposal_adjustment_non_nach;
+                break;
+        }
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+        return getViewHolder(view, viewType);//new AdjustmentAdapter.MyViewHolder(v);
     }
 
     /**
@@ -237,14 +256,19 @@ public class AdjustmentAdapter extends RecyclerView.Adapter<AdjustmentAdapter.Ba
         }
     }
 
-    public BaseAdjustmentViewHolder getViewHolder(View iView) {
-        switch (mItemLayoutId) {
-            case R.layout.view_proposal_adjustment_nach:
+    public BaseAdjustmentViewHolder getViewHolder(View iView, int viewtype) {
+        switch (viewtype) {
+            case 1://R.layout.view_proposal_adjustment_nach:
                 return new NACHAdjustmentViewHolder(iView);
-            case R.layout.view_proposal_adjustment_non_nach:
+            case 2://R.layout.view_proposal_adjustment_non_nach:
             default:
                 return new NonNACHAdjustmentViewHolder(iView);
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+
+        return mAdjustmentServiceList.get(position).getAdjustmentType();
+    }
 }

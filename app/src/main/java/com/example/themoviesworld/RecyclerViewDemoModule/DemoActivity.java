@@ -37,9 +37,11 @@ public class DemoActivity extends AppCompatActivity {
     RadioButton mNonNACHAdjustmentRB;
 
     // Only one adapter is required and will do. Will remove
-    private AdjustmentAdapter mNACHAdjustmentAdapter;
+   /* private AdjustmentAdapter mNACHAdjustmentAdapter;
 
-    private AdjustmentAdapter mNonNACHAdjustmentAdapter;
+    private AdjustmentAdapter mNonNACHAdjustmentAdapter;*/
+
+    private AdjustmentAdapter mAdjustmentAdapter;
 
 
     @Override
@@ -51,11 +53,14 @@ public class DemoActivity extends AppCompatActivity {
         mAdjustmentRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mAdjustmentRV.setItemAnimator(new DefaultItemAnimator());
 
-        mNACHAdjustmentAdapter = new AdjustmentAdapter(this, R.layout.view_proposal_adjustment_nach);
+        /*mNACHAdjustmentAdapter = new AdjustmentAdapter(this, R.layout.view_proposal_adjustment_nach);
         mNACHAdjustmentAdapter.setNonNACHServiceList(getServiceList());
 
         mNonNACHAdjustmentAdapter = new AdjustmentAdapter(this, R.layout.view_proposal_adjustment_non_nach);
-        mNonNACHAdjustmentAdapter.setNonNACHServiceList(getNonNACHServiceList());
+        mNonNACHAdjustmentAdapter.setNonNACHServiceList(getNonNACHServiceList());*/
+
+        mAdjustmentAdapter = new AdjustmentAdapter(this);
+        mAdjustmentRV.setAdapter(mAdjustmentAdapter);
 
         mAdjustmentTypeRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -66,11 +71,13 @@ public class DemoActivity extends AppCompatActivity {
                         break;
                     case R.id.nach_rb:
                         mAdjustmentRV.setVisibility(View.VISIBLE);
-                        mAdjustmentRV.setAdapter(mNACHAdjustmentAdapter);
+                        mAdjustmentAdapter.setAdjustmentServiceList(getNachServiceList());
+                        //mAdjustmentRV.setAdapter(mNACHAdjustmentAdapter);
                         break;
                     case R.id.non_nach_rb:
                         mAdjustmentRV.setVisibility(View.VISIBLE);
-                        mAdjustmentRV.setAdapter(mNonNACHAdjustmentAdapter);
+                        mAdjustmentAdapter.setAdjustmentServiceList(getNonNACHServiceList());
+                        //mAdjustmentRV.setAdapter(mNonNACHAdjustmentAdapter);
                         break;
                 }
             }
@@ -78,7 +85,7 @@ public class DemoActivity extends AppCompatActivity {
 
     }
 
-    private List<NACHService> getServiceList() {
+    private List<NACHService> getNachServiceList() {
 
         List<NACHService> nachServiceList = new ArrayList<>();
 
@@ -125,6 +132,69 @@ public class DemoActivity extends AppCompatActivity {
 
         nachServiceList.add(nachService1);
 
+        NACHService nachService2 = new NACHService();
+        nachService2.setServiceName("STAR 1");
+        nachService2.setServiceId("2");
+
+        AdjustmentType adjustmentType20 = new AdjustmentType();
+        adjustmentType20.setAdjustmentTypeId("900");
+        adjustmentType20.setAdjustmentTypeName("0");
+        nachService2.setNachAdjustmentTypeZero(adjustmentType20);
+
+        AdjustmentType adjustmentType21 = new AdjustmentType();
+        adjustmentType21.setAdjustmentTypeId("901");
+        adjustmentType21.setAdjustmentTypeName("1");
+        nachService2.setNachAdjustmentTypeOne(adjustmentType21);
+
+        AdjustmentType adjustmentType22 = new AdjustmentType();
+        adjustmentType22.setAdjustmentTypeId("902");
+        adjustmentType22.setAdjustmentTypeName("2");
+        nachService2.setNachAdjustmentTypeTwo(adjustmentType22);
+
+        nachServiceList.add(nachService2);
+
+        NACHService nachService3 = new NACHService();
+        nachService3.setServiceName("STAR 2");
+        nachService3.setServiceId("2");
+
+        AdjustmentType adjustmentType30 = new AdjustmentType();
+        adjustmentType30.setAdjustmentTypeId("900");
+        adjustmentType30.setAdjustmentTypeName("0");
+        nachService3.setNachAdjustmentTypeZero(adjustmentType30);
+
+        AdjustmentType adjustmentType31 = new AdjustmentType();
+        adjustmentType31.setAdjustmentTypeId("901");
+        adjustmentType31.setAdjustmentTypeName("1");
+        nachService3.setNachAdjustmentTypeOne(adjustmentType31);
+
+        AdjustmentType adjustmentType32 = new AdjustmentType();
+        adjustmentType32.setAdjustmentTypeId("902");
+        adjustmentType32.setAdjustmentTypeName("2");
+        nachService3.setNachAdjustmentTypeTwo(adjustmentType32);
+
+        nachServiceList.add(nachService3);
+
+        NACHService nachService4 = new NACHService();
+        nachService4.setServiceName("STAR 3");
+        nachService4.setServiceId("2");
+
+        AdjustmentType adjustmentType40 = new AdjustmentType();
+        adjustmentType40.setAdjustmentTypeId("900");
+        adjustmentType40.setAdjustmentTypeName("0");
+        nachService4.setNachAdjustmentTypeZero(adjustmentType40);
+
+        AdjustmentType adjustmentType41 = new AdjustmentType();
+        adjustmentType41.setAdjustmentTypeId("901");
+        adjustmentType41.setAdjustmentTypeName("1");
+        nachService4.setNachAdjustmentTypeOne(adjustmentType41);
+
+        AdjustmentType adjustmentType42 = new AdjustmentType();
+        adjustmentType42.setAdjustmentTypeId("902");
+        adjustmentType42.setAdjustmentTypeName("2");
+        nachService4.setNachAdjustmentTypeTwo(adjustmentType42);
+
+        nachServiceList.add(nachService4);
+
         return nachServiceList;
     }
 
@@ -150,7 +220,7 @@ public class DemoActivity extends AppCompatActivity {
 
         NonNACHService nonNACHService1 = new NonNACHService();
         nonNACHService1.setServiceName("TrustSeal");
-        nonNACHService1.setServiceId("3");
+        nonNACHService1.setServiceId("2");
 
         AdjustmentType adjustmentType20 = new AdjustmentType();
         adjustmentType20.setAdjustmentTypeId("13");
@@ -163,6 +233,54 @@ public class DemoActivity extends AppCompatActivity {
         nonNACHService1.setValueAdjustmentType(adjustmentType21);
 
         nonNachServiceList.add(nonNACHService1);
+
+        NonNACHService nonNACHService2 = new NonNACHService();
+        nonNACHService2.setServiceName("Sample1");
+        nonNACHService2.setServiceId("3");
+
+        AdjustmentType adjustmentType30 = new AdjustmentType();
+        adjustmentType30.setAdjustmentTypeId("15");
+        adjustmentType30.setAdjustmentTypeName("45 Days in Maxi");
+        nonNACHService2.setPeriodAdjustmentType(adjustmentType30);
+
+        AdjustmentType adjustmentType31 = new AdjustmentType();
+        adjustmentType31.setAdjustmentTypeId("16");
+        adjustmentType31.setAdjustmentTypeName("Rs. 8,000");
+        nonNACHService2.setValueAdjustmentType(adjustmentType31);
+
+        nonNachServiceList.add(nonNACHService2);
+
+        NonNACHService nonNACHService3 = new NonNACHService();
+        nonNACHService3.setServiceName("Sample2");
+        nonNACHService3.setServiceId("4");
+
+        AdjustmentType adjustmentType40 = new AdjustmentType();
+        adjustmentType40.setAdjustmentTypeId("17");
+        adjustmentType40.setAdjustmentTypeName("45 Days in Maxi");
+        nonNACHService3.setPeriodAdjustmentType(adjustmentType40);
+
+        AdjustmentType adjustmentType41 = new AdjustmentType();
+        adjustmentType41.setAdjustmentTypeId("18");
+        adjustmentType41.setAdjustmentTypeName("Rs. 8,000");
+        nonNACHService3.setValueAdjustmentType(adjustmentType41);
+
+        nonNachServiceList.add(nonNACHService3);
+
+        NonNACHService nonNACHService4 = new NonNACHService();
+        nonNACHService4.setServiceName("Sample3");
+        nonNACHService4.setServiceId("5");
+
+        AdjustmentType adjustmentType50 = new AdjustmentType();
+        adjustmentType50.setAdjustmentTypeId("19");
+        adjustmentType50.setAdjustmentTypeName("45 Days in Maxi");
+        nonNACHService4.setPeriodAdjustmentType(adjustmentType50);
+
+        AdjustmentType adjustmentType51 = new AdjustmentType();
+        adjustmentType51.setAdjustmentTypeId("20");
+        adjustmentType51.setAdjustmentTypeName("Rs. 8,000");
+        nonNACHService4.setValueAdjustmentType(adjustmentType51);
+
+        nonNachServiceList.add(nonNACHService4);
 
         return nonNachServiceList;
     }
